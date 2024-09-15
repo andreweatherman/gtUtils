@@ -39,7 +39,6 @@ The simplest way to use `gt_color_pills` is to apply it to a column in a gt tabl
 mtcars %>% 
   head() %>% 
   gt() %>% 
-  gt_theme_sofa() %>% 
   gt_color_pills(mpg)
 ```
 
