@@ -59,9 +59,18 @@ gt_border_bars_top <- function(gt_object,
     gt_object[["_options"]][["value"]][[opt_position]] <- table_id
   }
 
-  # grab font used in source notes
-  font <- filter(gt:::dt_styles_get(gt_object), locname == "title")$styles[[1]]$cell_text$font
-  google_font <- gt:::google_font(font)$import_stmt
+  # try to get font from title class but just inherit base if no font is specified
+  font_info <- tryCatch({
+    filter(gt:::dt_styles_get(gt_object), locname == "title")$styles[[1]]$cell_text$font
+  }, error = function(e) {
+    "inherit"
+  })
+
+  google_font <- tryCatch({
+    gt:::google_font(font_info)$import_stmt
+  }, error = function(e) {
+    NULL # no font rec. above
+  })
 
   align_style <- switch(bar_align,
                         "left" = "margin-left: 0; margin-right: auto;",
@@ -70,11 +79,8 @@ gt_border_bars_top <- function(gt_object,
                         "margin-left: auto; margin-right: auto;"
   )
 
-  ## a bunch of switching and if/elses for css; probably a cleaner way
-  ## to do this but this seems to work *shrug*
-
-  if (is.null(text) && is.null(img)) {
-    bars <- paste0(
+  bars <- if (is.null(text) && is.null(img)) {
+    paste0(
       '<div style="background-color: transparent; width: ', bar_width, '; ', align_style, '">',
       paste0(
         sapply(colors, function(color) {
@@ -85,12 +91,12 @@ gt_border_bars_top <- function(gt_object,
       '</div>'
     )
   } else {
-    bars <- paste0(
-      '<style>', google_font, '</style>',
+    paste0(
+      if (!is.null(google_font)) paste0('<style>', google_font, '</style>') else "",
       '<div style="display: flex; justify-content: space-between; align-items: center; height: ', bar_height, 'px; background-color: ', colors[1], '; width: ', bar_width, '; ', align_style, '">',
       if (!is.null(text)) {
         paste0('<span style="font-weight:', text_weight,
-               '; color:', text_color, '; font-size:', text_size, 'px; padding-', text_align, ': ', text_padding, 'px; font-family: ', font, ';">', text, '</span>')
+               '; color:', text_color, '; font-size:', text_size, 'px; padding-', text_align, ': ', text_padding, 'px; font-family: ', font_info, ';">', text, '</span>')
       } else {
         paste0('<span></span>')
       },
@@ -107,7 +113,6 @@ gt_border_bars_top <- function(gt_object,
   gt_object %>%
     gt::tab_caption(html(bars)) %>%
     gt::opt_css(paste0("#", table_id, " .gt_caption {padding-top: 0px !important; padding-bottom: 0px !important;}"), add = TRUE)
-
 }
 
 
@@ -170,9 +175,17 @@ gt_border_bars_bottom <- function(gt_object,
     gt_object[["_options"]][["value"]][[opt_position]] <- table_id
   }
 
-  # grab font used in source notes
-  font <- filter(gt:::dt_styles_get(gt_object), locname == "source_notes")$styles[[1]]$cell_text$font
-  google_font <- gt:::google_font(font)$import_stmt
+  font_info <- tryCatch({
+    filter(gt:::dt_styles_get(gt_object), locname == "source_notes")$styles[[1]]$cell_text$font
+  }, error = function(e) {
+    "inherit"
+  })
+
+  google_font <- tryCatch({
+    gt:::google_font(font_info)$import_stmt
+  }, error = function(e) {
+    NULL
+  })
 
   align_style <- switch(bar_align,
                         "left" = "margin-left: 0; margin-right: auto;",
@@ -194,11 +207,11 @@ gt_border_bars_bottom <- function(gt_object,
     )
   } else {
     bars <- paste0(
-      '<style>', google_font, '</style>',
+      if (!is.null(google_font)) paste0('<style>', google_font, '</style>') else "",
       '<div style="display: flex; justify-content: space-between; align-items: center; height: ', bar_height, 'px; background-color: ', colors[1], '; width: ', bar_width, '; ', align_style, '">',
       if (!is.null(text)) {
         paste0('<span style="font-weight:', text_weight,
-               '; color:', text_color, '; font-size:', text_size, 'px; padding-', text_align, ': ', text_padding, 'px; font-family: ', font, ';">', text, '</span>')
+               '; color:', text_color, '; font-size:', text_size, 'px; padding-', text_align, ': ', text_padding, 'px; font-family: ', font_info, ';">', text, '</span>')
       } else {
         paste0('<span></span>')
       },
@@ -215,5 +228,4 @@ gt_border_bars_bottom <- function(gt_object,
   gt_object %>%
     gt::tab_source_note(html(bars)) %>%
     gt::opt_css(paste0("#", table_id, " .gt_sourcenote {padding-right: 0px !important; padding-left: 0px !important; padding-bottom: 0px;}"), add = TRUE)
-
 }
