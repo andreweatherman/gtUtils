@@ -1,0 +1,83 @@
+url: https://andreweatherman.github.io/gtUtils/
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    base_font:
+      google: Jost
+    heading_font:
+      google: Oswald
+    code_font:
+      google: JetBrains Mono
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+    danger: "#A6081A"
+  twitter:
+    creator: '@andreweatherman'
+    card: summary_large_image
+navbar:
+  structure:
+    left:
+    - reference
+    - articles
+    - news
+    right:
+    - search
+    - github
+home:
+  title: gtUtils R Package
+  links:
+  - text: Andrew's Twitter
+    href: https://twitter.com/andreweatherman
+    target: _blank
+  - text: cbbdata Package
+    href: https://cbbdata.aweatherman.com/
+    target: _blank
+  - text: cbbplotR Package
+    href: https://cbbplotr.aweatherman.com/
+    target: _blank
+  - text: Andrew's Personal Site
+    href: https://www.aweatherman.com/
+    target: _blank
+  - text: Andrew's Viz Site
+    href: https://www.bucketsandbytes.com
+    target: _blank
+reference:
+- title: Annotations
+  desc: Functions for table annotations
+  contents:
+  - gt_538_caption
+  - gt_centered_legend
+  - gt_column_subheaders
+- title: Coloring
+  desc: Functions to color/fill columns of data
+  contents:
+  - gt_color_pills
+  - gt_color_results
+  - gt_indicator_boxes
+- title: Other
+  desc: Miscellaneous functions
+  contents:
+  - gt_bold_rows
+  - gt_border_bars_bottom
+  - gt_border_bars_top
+  - gt_border_grid
+  - gt_set_font
+  - gt_tiers
+- title: Viewing + Saving
+  desc: Functions for viewing and saving tables
+  contents:
+  - gt_save_crop
+  - gt_stack_tables
+- title: Themes
+  desc: Table themes for use with {gt}
+  contents:
+  - gt_theme_athletic
+  - gt_theme_gtutils
+  - gt_theme_kenpom
+  - gt_theme_ncaa
+  - gt_theme_pl
+  - gt_theme_savant
+  - gt_theme_sofa
+  - gt_theme_tier

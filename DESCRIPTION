@@ -1,0 +1,30 @@
+Package: gtUtils
+Title: Enhancements and Utilities for the gt Package
+Version: 0.1.0
+Authors@R: 
+    person("Andrew", "Weatherman", , "andrew@aweatherman.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    dplyr,
+    glue,
+    gt,
+    gtExtras,
+    htmltools,
+    rlang,
+    scales
+Suggests: 
+    knitr,
+    magick,
+    purrr,
+    rmarkdown,
+    webshot2
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+LazyData: true
+URL: https://gtutils.aweatherman.com/, https://andreweatherman.github.io/gtUtils/
+BugReports: https://github.com/andreweatherman/gtUtils

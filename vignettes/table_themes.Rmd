@@ -1,0 +1,89 @@
+---
+title: "Table Themes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  eval = FALSE
+)
+```
+
+`gtUtils` v0.1 ships with eight table themes.
+
+<details>
+<summary>gt_theme_athletic</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_athletic.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_gtutils</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_gtutils.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_kenpom</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_kenpom.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_ncaa</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_ncaa.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_pl</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_pl.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_savant</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_savant.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_sofa -- light mode</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_sofa_light.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_sofa -- dark mode</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_sofa_dark.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_tier -- light mode</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_tier_light.png")
+```
+</details>
+
+<details>
+<summary>gt_theme_tier -- dark mode</summary>
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("images/gt_theme_tier_dark.png")
+```
+</details>
