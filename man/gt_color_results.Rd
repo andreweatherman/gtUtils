@@ -2,45 +2,83 @@
 % Please edit documentation in R/gt_color_results.R
 \name{gt_color_results}
 \alias{gt_color_results}
-\title{Color Rows in gt Table Based on Win/Loss Results}
+\title{Color rows of a \code{gt} table by win, loss, or tie result}
 \usage{
 gt_color_results(
   gt_object,
   result_column = "result",
   win_color = "#5DA271",
   loss_color = "#C84630",
+  tie_color = NULL,
   wins_text_color = "white",
   loss_text_color = "white",
+  tie_text_color = "white",
+  tie_value = "T",
   result_type = "wl"
 )
 }
 \arguments{
-\item{gt_object}{A gt table object.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{result_column}{The name of the column in \code{data} that contains the
-result indicators. Default is 'result'.}
+\item{result_column}{The column holding the result indicators, as a bare
+column name or a string. Defaults to \code{"result"}.}
 
-\item{win_color}{The background color for rows indicating a win. Default is
-'#5DA271' (green).}
+\item{win_color}{Character. The background fill for winning rows. Defaults to
+\code{"#5DA271"}.}
 
-\item{loss_color}{The background color for rows indicating a loss. Default is
-'#C84630' (red).}
+\item{loss_color}{Character. The background fill for losing rows. Defaults to
+\code{"#C84630"}.}
 
-\item{wins_text_color}{The text color for rows indicating a win. Default is
-'white'.}
+\item{tie_color}{Optional. The background fill for tie rows. When \code{NULL}, ties
+are not colored. Defaults to \code{NULL}.}
 
-\item{loss_text_color}{The text color for rows indicating a loss. Default is
-'white'.}
+\item{wins_text_color}{Character. The text color for winning rows. Defaults to
+\code{"white"}.}
 
-\item{result_type}{The type of result indicators used in the \code{result_column}.
-Options are 'wl' (default, for 'W' and 'L') or 'binary' (for 1 and 0).}
+\item{loss_text_color}{Character. The text color for losing rows. Defaults to
+\code{"white"}.}
+
+\item{tie_text_color}{Character. The text color for tie rows. Defaults to
+\code{"white"}.}
+
+\item{tie_value}{The value in \code{result_column} marking a tie, used when
+\code{tie_color} is set. Defaults to \code{"T"}.}
+
+\item{result_type}{Character. The encoding of \code{result_column}. Either \code{"wl"}
+for \code{"W"} and \code{"L"}, or \code{"binary"} for \code{1} and \code{0}. Defaults to \code{"wl"}.}
 }
 \value{
-A \code{gt} table with styled rows based on the win/loss results.
+Returns a modified \code{gt} table with winning and losing rows colored.
 }
 \description{
-This function styles rows in a \code{gt} table based on win/loss
-results. It allows customization of colors and text for win and loss rows.
-Users can specify the column with result data, customize colors, and choose
-between traditional win/loss or binary result types.
+Fills and recolors each row according to a result read from a column. Results
+can be encoded as \code{"W"} and \code{"L"} or as \code{1} and \code{0}, with an optional tie
+state. Rows holding none of the values are left unchanged.
+}
+\details{
+A \code{gt::tab_style()} pass fills and recolors the body rows whose
+\code{result_column} equals the win value, then the loss value, and then, when
+\code{tie_color} is set, the \code{tie_value}. Under \code{result_type = "wl"} the win and
+loss values compared are \code{"W"} and \code{"L"}; under \code{"binary"} they are \code{1} and
+\code{0}. Any row matching none of the values keeps its existing styling.
+}
+\examples{
+\dontrun{
+library(gt)
+
+results <- data.frame(
+  game = paste("Game", 1:4),
+  pts = c(88, 74, 102, 65),
+  result = c("W", "L", "W", "L")
+)
+
+gt(results) \%>\% gt_color_results()
+
+# binary encoding, with custom colors
+results$result <- c(1, 0, 1, 0)
+gt(results) \%>\%
+  gt_color_results(result_type = "binary", win_color = "#1B7837",
+                   loss_color = "#762A83")
+}
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gt_save_crop.R
 \name{gt_save_crop}
 \alias{gt_save_crop}
-\title{Crop \code{gt} tables}
+\title{Save a \code{gt} table to an image and trim its whitespace}
 \usage{
 gt_save_crop(
   data,
@@ -10,21 +10,61 @@ gt_save_crop(
   bg = "white",
   whitespace = 50,
   zoom = 2,
-  expand = 5
+  expand = 5,
+  width = NULL
 )
 }
 \arguments{
-\item{file}{A valid path to a .png, .jpg, or .jpeg to crop}
+\item{data}{A \code{gt} table object to save.}
 
-\item{bg}{The background color of the added trimming (defaults to white)}
+\item{file}{Character. A path ending in \code{.png}, \code{.jpg}, or \code{.jpeg} to write
+the image to. Defaults to \code{NULL}, which returns the image without writing it.}
 
-\item{whitespace}{A numeric representing the amount of whitespace to leave
-around the image}
+\item{bg}{Character. The background color of the padded border. Defaults to
+\code{"white"}.}
+
+\item{whitespace}{Numeric. The border, in pixels, left around the trimmed
+table. Defaults to \code{50}.}
+
+\item{zoom}{Numeric. The rendering zoom factor passed to the underlying save.
+A higher value gives a sharper image. Defaults to \code{2}.}
+
+\item{expand}{Numeric. The pixel expansion passed to the underlying save.
+Defaults to \code{5}.}
+
+\item{width}{Optional. A final output width in pixels. The image is scaled to
+it, height following, so a series of tables can share one width. Defaults to
+\code{NULL}, which leaves the rendered width alone.}
 }
 \value{
-Returns a cropped image file
+Writes the cropped image to \code{file}.
 }
 \description{
-Programatically save and crop \code{gt} tables using \code{magick}. Uses \code{gtsave_extra}
-to save the image and \code{magick} to crop it.
+Renders a table to a PNG, JPG, or JPEG, trims the whitespace \code{gtExtras} leaves
+around it, and pads a uniform border back on. Saving runs through
+\code{gtExtras::gtsave_extra()} and the trimming and padding through \code{magick}.
+}
+\details{
+The table is first written to a temporary file at \code{zoom} and \code{expand}, then
+read back with \code{magick}, trimmed to its content, and given a \code{whitespace}
+border in \code{bg}. When \code{width} is set the finished image is resized to that
+width with the height following, so several tables saved at the same \code{width}
+line up when posted together. The temporary file is removed afterward.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars)) \%>\%
+  gt_theme_broadsheet() \%>\%
+  gt_save_crop("mtcars.png")
+
+# pin a shared width across a series
+gt(head(iris)) \%>\%
+  gt_save_crop("iris.png", width = 900, bg = "#FBFAF7")
+}
+
+}
+\seealso{
+\code{\link[=gt_social_crop]{gt_social_crop()}} for padding onto a fixed-ratio canvas.
 }

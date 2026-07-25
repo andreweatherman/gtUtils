@@ -2,24 +2,78 @@
 % Please edit documentation in R/gt_538_caption.R
 \name{gt_538_caption}
 \alias{gt_538_caption}
-\title{538 Caption Theme}
+\title{Add a 538-style caption to a \code{gt} table}
 \usage{
-gt_538_caption(gt_object, top_caption, bottom_caption = NULL, ...)
+gt_538_caption(
+  gt_object,
+  top_caption = NULL,
+  bottom_caption = NULL,
+  rule_color = NULL,
+  rule_width = 1,
+  size = 12,
+  align = "right",
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{top_caption}{The caption to render as a footnote (can be markdown).}
+\item{top_caption}{Character. Text rendered as a footnote beneath the table,
+with a rule drawn under it. Accepts markdown. Defaults to \code{NULL}, which
+draws the rule with no text above it.}
 
-\item{bottom_caption}{The caption to render as a source note (can be markdown).}
+\item{bottom_caption}{Character. Text rendered as a source note below the top
+caption, aligned by \code{align}. Accepts markdown. Defaults to \code{NULL}, which
+shows only the top caption.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}.}
+\item{rule_color}{Optional. A hex color for the rule under the top caption.
+When \code{NULL}, the color is taken from the rendered table so it tracks the
+theme. Defaults to \code{NULL}.}
+
+\item{rule_width}{Numeric. The rule width in pixels. Defaults to \code{1}.}
+
+\item{size}{Numeric. The font size of the top caption in pixels. Defaults to
+\code{12}.}
+
+\item{align}{Character. The alignment of the bottom caption. Defaults to
+\code{"right"}.}
+
+\item{...}{Additional arguments. Currently unused.}
 }
 \value{
-A \code{gt_tbl} with the styled captions
+Returns a modified \code{gt} table with the styled captions.
 }
 \description{
-Adds a top-line caption below the table with a line underneath like
-538 tables. The \code{top_caption} is rendered as a footnote, and \code{bottom_caption}
-is rendered as a source note with markdown support.
+Adds a caption block beneath the table with a rule under its top line, in the
+style of FiveThirtyEight tables. The \code{top_caption} renders as a footnote with
+a border drawn under it, and the \code{bottom_caption} renders as a right-aligned
+source note below it. Both accept markdown.
+}
+\details{
+The top caption is attached with \code{gt::tab_footnote()} on the column labels,
+which places it in the table footer. Scoped CSS then hides the footnote mark
+and draws a bottom border under the footnote, so it reads as a ruled caption
+rather than a numbered note. When \code{rule_color} is \code{NULL} the border color is
+taken from the first text color found in the rendered table (via
+\code{gt:::as.tags.gt_tbl()}), so it tracks the theme across light and dark color
+modes, and falls back to a neutral gray when the render carries no color. The
+rules are keyed on the table id. If the table has none, one is generated and
+assigned.
+
+Apply the theme before this function. The rule color is read off the rendered
+table, so calling it first on a dark theme borrows a near-black (\verb{#333333})
+and the rule disappears into the background. Pass \code{rule_color} to sidestep the
+question entirely.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars[c("mpg", "hp", "wt")], 6)) \%>\%
+  gt_538_caption(
+    top_caption = "Fuel economy and power",
+    bottom_caption = "Source: *1974 Motor Trend* road tests"
+  )
+}
+
 }

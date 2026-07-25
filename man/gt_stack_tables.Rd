@@ -2,21 +2,118 @@
 % Please edit documentation in R/gt_stack_tables.R
 \name{gt_stack_tables}
 \alias{gt_stack_tables}
-\title{Stack multiple \code{gt} tables}
+\title{Stack several \code{gt} tables vertically}
 \usage{
-gt_stack_tables(tables = NULL)
+gt_stack_tables(
+  tables = NULL,
+  gap = 16,
+  align = c("center", "left", "right"),
+  title = NULL,
+  subtitle = NULL,
+  caption = NULL,
+  source_note = NULL,
+  caption_rule = FALSE,
+  title_style = list(),
+  subtitle_style = list(),
+  caption_style = list(),
+  source_note_style = list(),
+  file = NULL,
+  bg = "white",
+  whitespace = 50,
+  zoom = 2
+)
 }
 \arguments{
 \item{tables}{A list of \code{gt} table objects to stack.}
+
+\item{gap}{Numeric. The space between tables in pixels. Defaults to \code{16}.}
+
+\item{align}{Character. How tables of differing width line up, one of
+\code{"center"}, \code{"left"}, or \code{"right"}. Defaults to \code{"center"}.}
+
+\item{title}{Character. An optional heading above the stack. Defaults to
+\code{NULL}.}
+
+\item{subtitle}{Character. An optional line below \code{title}. Defaults to \code{NULL}.}
+
+\item{caption}{Character. An optional note below the stack. Defaults to \code{NULL}.}
+
+\item{source_note}{Character. An optional second line below \code{caption},
+right-aligned by default. Set both, with \code{caption_rule = TRUE}, for the split
+caption \code{\link[=gt_538_caption]{gt_538_caption()}} gives a single table. Defaults to \code{NULL}.}
+
+\item{caption_rule}{Logical. Should a hairline sit between \code{caption} and
+\code{source_note}? Defaults to \code{FALSE}.}
+
+\item{title_style, subtitle_style, caption_style, source_note_style}{Named lists
+of style options. See Styling. Each defaults to an empty list.}
+
+\item{file}{Optional. A path to write a PNG to. If \code{NULL}, the stack is
+returned for the viewer instead. Defaults to \code{NULL}.}
+
+\item{bg}{Character. The background color, used when saving. Defaults to
+\code{"white"}.}
+
+\item{whitespace}{Numeric. Padding left around the stack when saving, in
+pixels. Defaults to \code{50}.}
+
+\item{zoom}{Numeric. The rendering zoom factor used when saving. Defaults to
+\code{2}.}
 }
 \value{
-Displays the stacked tables in the viewer.
+Displays the stacked tables in the viewer, or writes them to \code{file}.
 }
 \description{
-This function takes multiple \code{gt} tables and stacks them vertically into a single HTML output.
-The stacked tables are displayed in the viewer.
+Places a list of tables one above another in a single block, with an optional
+shared heading and footer. Each table keeps its own columns, widths, and
+header. \code{\link[=gt_snake]{gt_snake()}} folds one table into blocks instead, and \code{\link[=gt_grid]{gt_grid()}}
+arranges tables side by side.
 }
 \details{
-This function stacks multiple \code{gt} tables vertically in a single HTML block and displays the stacked tables
-in the viewer.
+The stack is assembled as HTML rather than a \code{gt} table, since each table keeps
+its own columns and header. That makes it a last step, after every table is
+themed and formatted, and it means the output cannot be passed back into
+further \code{gt} calls. Saving happens here through \code{webshot2} rather than through
+\code{\link[=gt_save_crop]{gt_save_crop()}}, so a \code{file} write needs the \code{webshot2} package.
+
+A shared heading and footer sit outside the stack in a shrink-to-fit wrapper,
+so they line up with the tables rather than the page. Google fonts named in a
+style list are loaded through a stylesheet link, since the composed HTML does
+not run through \code{gt}'s own font machinery.
+}
+\section{Styling}{
+
+
+\code{title_style}, \code{subtitle_style}, \code{caption_style}, and \code{source_note_style} are
+named lists following the same convention as \code{\link[=gt_grid]{gt_grid()}} and
+\code{\link[=gt_title_header]{gt_title_header()}}. Recognized keys are \code{font} (a Google font name), \code{size},
+\code{color}, \code{weight}, \code{italic}, \code{spacing} (letter spacing), \code{transform} (such as
+\code{"uppercase"}), and \code{align}, plus \code{line_height}, \code{margin_top}, \code{margin_bottom},
+\code{padding_top}, and \code{padding_bottom}. Any length takes a number, read as pixels,
+or a CSS string. Any key left out keeps its default.
+}
+
+\examples{
+\dontrun{
+library(gt)
+
+t1 <- gt(head(mtcars[c("mpg", "hp")]))
+t2 <- gt(head(iris[c("Sepal.Length", "Species")]))
+
+gt_stack_tables(list(t1, t2))
+
+# one heading over the stack, saved straight to an image
+gt_stack_tables(
+  list(t1, t2),
+  title = "Two tables",
+  subtitle = "Stacked into one block",
+  title_style = list(font = "Oswald", size = 30, transform = "uppercase"),
+  file = "stack.png"
+)
+}
+
+}
+\seealso{
+\code{\link[=gt_grid]{gt_grid()}} for a side-by-side grid and \code{\link[=gt_snake]{gt_snake()}} for folding one
+long table into blocks.
 }

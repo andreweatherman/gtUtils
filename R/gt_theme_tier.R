@@ -1,20 +1,49 @@
-#' Tier List `gt` Table Theme
+#' Tier list theme for `gt` tables
 #'
-#' Apply a tier list theme to a gt table
+#' Oswald throughout on a near-black (`"dark"`) or white (`"light"`) ground, with
+#' a bold title and every column center aligned. Rows are separated by thin black
+#' borders and horizontal rules are otherwise hidden.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param style Dark (default, "dark") or Light ("light") table theme
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param style Character. The color scheme, `"dark"` for a near-black ground or
+#'   `"light"` for a white ground. Defaults to `"dark"`.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
+#' @details
+#' Every body row except the last carries a black bottom border, and the last
+#' row's border is painted in the ground color so it does not double the edge of
+#' the table. Pairs with [gt_tiers()], which builds the tier rows themselves.
+#'
 #' @section Figures:
 #' \if{html}{\figure{tier_list_example.png}{options: width=100\%}}
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_tier()
+#' gt(head(mtcars)) %>% gt_theme_tier(style = "light")
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_tier <- function(gt_object, style = "dark", ...) {
+gt_theme_tier <- function(gt_object, style = "dark",
+                          density = c("comfortable", "compact", "social"),
+                          ...) {
 
-  stopifnot(`'gt_object' must be a 'gt_tbl', have you accidentally passed raw data?` = "gt_tbl" %in%
-              class(gt_object))
+  .check_gt(gt_object)
 
   table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
 
@@ -112,6 +141,6 @@ gt_theme_tier <- function(gt_object, style = "dark", ...) {
       )
     ))
 
-  return(table)
+  .theme_scale_output(table, density)
 
 }

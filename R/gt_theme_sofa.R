@@ -1,23 +1,51 @@
-#' Sofa Score `gt` Table Theme
+#' SofaScore theme for `gt` tables
 #'
-#' Apply Sofa Score theme to a gt table
+#' Sofia Sans Condensed throughout on a warm cream (`"light"`) or dark navy
+#' (`"dark"`) ground, after SofaScore, with bold column labels and bold row-group
+#' labels. Column spanners are bold and underlined. Horizontal rules are hidden,
+#' so the ground alone separates the rows.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param style Light (default, "light") or Dark ("dark") table theme
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param style Character. The color scheme, `"light"` for a warm cream ground or
+#'   `"dark"` for a dark navy ground. Defaults to `"light"`.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
+#' @details
+#' The table background, its outer borders, and the last row's bottom border are
+#' all painted in the chosen ground color, so the rows read as separated by space
+#' rather than by rules. Row groups are closed with a black bottom border.
+#'
 #' @section Figures:
 #' \if{html}{\figure{gt_theme_sofa_light.png}{options: width=100\%}}
 #' \if{html}{\figure{gt_theme_sofa_dark.png}{options: width=100\%}}
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_sofa()
+#' gt(head(mtcars)) %>% gt_theme_sofa(style = "dark")
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_sofa <- function(gt_object, style = "light", ...) {
+gt_theme_sofa <- function(gt_object, style = "light",
+                          density = c("comfortable", "compact", "social"),
+                          ...) {
 
-  stopifnot(
-    `'gt_object' must be a 'gt_tbl', have you accidentally passed raw data?` = "gt_tbl" %in%
-      class(gt_object)
-  )
+  .check_gt(gt_object)
 
   table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
 
@@ -129,7 +157,7 @@ gt_theme_sofa <- function(gt_object, style = "light", ...) {
       paste0(
         "#",
         table_id,
-        " tbody tr:last-child {border-bottom: 2px solid #ffffff00;}"
+        " tbody tr:last-child {border-bottom: 2px solid ", base_color, ";}"
       ),
       paste0(
         "#",
@@ -152,5 +180,6 @@ gt_theme_sofa <- function(gt_object, style = "light", ...) {
         " .gt_heading {padding-bottom: 0px; padding-top: 6px;}"
       ),
       paste0("#", table_id, " .gt_column_spanner {font-size: 12px; font-weight: bold; text-decoration: underline;}")
-    ))
+    )) %>%
+    .theme_scale_output(density)
 }

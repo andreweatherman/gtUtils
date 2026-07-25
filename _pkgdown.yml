@@ -1,7 +1,7 @@
 url: https://andreweatherman.github.io/gtUtils/
 template:
   bootstrap: 5
-  light-switch: true
+  light-switch: false
   bslib:
     base_font:
       google: Jost
@@ -9,10 +9,13 @@ template:
       google: Oswald
     code_font:
       google: JetBrains Mono
-    primary: "#0054AD"
-    border-radius: 0.5rem
-    btn-border-radius: 0.25rem
+    # deep navy on warm paper, burnt-orange accent
+    bg: "#FBFAF7"
+    fg: "#12263F"
+    primary: "#C24A0C" # links + buttons, ~4.6:1 on paper
     danger: "#A6081A"
+    border-radius: 0.5rem
+    btn-border-radius: 0.375rem
   twitter:
     creator: '@andreweatherman'
     card: summary_large_image
@@ -27,57 +30,87 @@ navbar:
     - github
 home:
   title: gtUtils R Package
-  links:
-  - text: Andrew's Twitter
-    href: https://twitter.com/andreweatherman
-    target: _blank
-  - text: cbbdata Package
-    href: https://cbbdata.aweatherman.com/
-    target: _blank
-  - text: cbbplotR Package
-    href: https://cbbplotr.aweatherman.com/
-    target: _blank
-  - text: Andrew's Personal Site
-    href: https://www.aweatherman.com/
-    target: _blank
-  - text: Andrew's Viz Site
-    href: https://www.bucketsandbytes.com
-    target: _blank
+  sidebar: false
 reference:
 - title: Annotations
   desc: Functions for table annotations
   contents:
   - gt_538_caption
-  - gt_centered_legend
+  - gt_cutline
+  - gt_marginalia
   - gt_column_subheaders
+  - gt_social_tag
+  - gt_title_header
+  - gt_watermark
 - title: Coloring
   desc: Functions to color/fill columns of data
   contents:
+  - gt_legend_continuous
+  - gt_legend_discrete
   - gt_color_pills
+  - gt_percentile_bar
+  - gt_row_accent
+  - gt_color_ranks
   - gt_color_results
+  - gt_group_stripes
+  - gt_highlight_cells
+  - gt_highlight_na
+  - gt_outliers
   - gt_indicator_boxes
+  - gt_spotlight
 - title: Other
   desc: Miscellaneous functions
   contents:
+  - pal_midnight
   - gt_bold_rows
   - gt_border_bars_bottom
   - gt_border_bars_top
   - gt_border_grid
+  - gt_delta
+  - gt_fmt_rank
+  - gt_fmt_tally
+  - gt_scale_note
+  - gt_significance
   - gt_set_font
   - gt_tiers
+  - gt_wrap_labels
+- title: Layout
+  desc: Arranging tables and their blocks
+  contents:
+  - gt_grid
+  - gt_snake
+  - gt_snake_align
+  - gt_theme_preview
+  - gt_stack_tables
 - title: Viewing + Saving
   desc: Functions for viewing and saving tables
   contents:
+  - gt_save_batch
   - gt_save_crop
-  - gt_stack_tables
+  - gt_social_crop
+  - theme_bg
 - title: Themes
   desc: Table themes for use with {gt}
   contents:
+  - gt_theme_almanac
   - gt_theme_athletic
+  - gt_theme_booktabs
+  - gt_theme_broadsheet
+  - gt_theme_brutalist
+  - gt_theme_drench
   - gt_theme_gtutils
   - gt_theme_kenpom
+  - gt_theme_midnight
   - gt_theme_ncaa
   - gt_theme_pl
   - gt_theme_savant
+  - gt_theme_scoreboard
   - gt_theme_sofa
+  - gt_theme_swiss
+  - gt_theme_terminal
   - gt_theme_tier
+  - gt_theme_tufte
+- title: Deprecated
+  desc: Former names, kept for backward compatibility
+  contents:
+  - gtUtils-deprecated

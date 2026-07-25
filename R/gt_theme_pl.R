@@ -1,25 +1,51 @@
-#' Premier League `gt` Table Theme
+#' Premier League theme for `gt` tables
 #'
-#' Apply Premier League theme to a gt table
+#' DM Sans throughout in the Premier League's deep purple (`#37003c`), with
+#' muted-purple column labels and a purple rule bracketing the body. Row groups
+#' render as white labels on a pale lilac fill, and column spanners are bold and
+#' underlined.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
+#' @details
+#' A purple rule closes the column labels and another opens the body, and each
+#' body row is separated by a purple bottom border. The last body row's bottom
+#' border is painted white so it does not double the rule that closes the table.
+#'
 #' @section Figures:
 #' \if{html}{\figure{gt_theme_pl.png}{options: width=100\%}}
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_pl()
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_pl <- function(gt_object, ...) {
+gt_theme_pl <- function(gt_object,
+                        density = c("comfortable", "compact", "social"),
+                        ...) {
 
-  table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
+  .check_gt(gt_object)
 
-  if (is.na(table_id)) {
-    table_id <- gt::random_id()
-    opt_position <- which("table_id" %in% gt_object[["_options"]][["parameter"]])[[1]]
-    gt_object[["_options"]][["value"]][[opt_position]] <- table_id
-  }
-
+  res <- .table_id(gt_object)
+  gt_object <- res$object
+  table_id <- res$id
   data <- gt_object[["_data"]]
 
   gt_object %>%
@@ -126,6 +152,8 @@ gt_theme_pl <- function(gt_object, ...) {
       ...
     ) %>%
     gt::opt_css(
+      c(
+      .theme_last_row_border(table_id, "#FFFFFF"),
       paste0("#", table_id,
              " .gt_col_heading
              {
@@ -148,8 +176,10 @@ gt_theme_pl <- function(gt_object, ...) {
              " .gt_sourcenote
              {
               line-height: 1.2
-            }"),
+            }")
+      ),
       add = TRUE
-    )
+    ) %>%
+    .theme_scale_output(density)
 
 }

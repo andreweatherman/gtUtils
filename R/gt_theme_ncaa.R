@@ -1,19 +1,49 @@
-#' NCAA `gt` Table Theme
+#' NCAA theme for `gt` tables
 #'
-#' Apply NCAA theme to a gt table
+#' Open Sans throughout, with uppercase white column labels on a solid black band
+#' and zebra-striped rows, after the NCAA. Row groups render as white labels on a
+#' dark gray fill, column spanners are underlined, and every column is left
+#' aligned with a 25px left indent on each row.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
+#' @details
+#' Column labels sit in a solid black band in white uppercase Open Sans, while
+#' source notes and footnotes switch to Almarai. Rows are zebra-striped through
+#' [gt::opt_row_striping()], horizontal rules are hidden, and each row and heading
+#' carries a 25px left indent. The last body row's bottom border is painted white
+#' so it does not double the rule that closes the table.
+#'
 #' @section Figures:
 #' \if{html}{\figure{gt_theme_ncaa.png}{options: width=100\%}}
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_ncaa()
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_ncaa <- function(gt_object, ...) {
+gt_theme_ncaa <- function(gt_object,
+                          density = c("comfortable", "compact", "social"),
+                          ...) {
 
-  stopifnot(`'gt_object' must be a 'gt_tbl', have you accidentally passed raw data?` = "gt_tbl" %in%
-              class(gt_object))
+  .check_gt(gt_object)
 
   table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
 
@@ -110,13 +140,14 @@ gt_theme_ncaa <- function(gt_object, ...) {
       ...
     ) %>%
     gt::opt_row_striping() %>%
-    gt::opt_css(c(paste0("#", table_id, " tbody tr:last-child {border-bottom: 2px solid #ffffff00;}"),
+    gt::opt_css(c(paste0("#", table_id, " tbody tr:last-child {border-bottom: 2px solid #FFFFFF;}"),
                   paste0("#", table_id, " .gt_col_heading {padding: 5px 5px 5px 25px;}"),
                   paste0("#", table_id, " .gt_row {padding: 5px 5px 5px 25px;}"),
                   paste0("#", table_id, " .gt_subtitle {padding-top:0px !important; padding-bottom: 4px !important;}"),
                   paste0("#", table_id, " .gt_heading {padding-bottom: 0px; padding-top: 6px;}"),
                   paste0("#", table_id, " .gt_column_spanner {text-decoration: underline;}"),
                   paste0("#", table_id, " #toss_out_spanner_dev {display: none;}"))
-              )
+              ) %>%
+    .theme_scale_output(density)
 
 }

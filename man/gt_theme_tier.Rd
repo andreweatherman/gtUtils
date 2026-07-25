@@ -2,25 +2,59 @@
 % Please edit documentation in R/gt_theme_tier.R
 \name{gt_theme_tier}
 \alias{gt_theme_tier}
-\title{Tier List \code{gt} Table Theme}
+\title{Tier list theme for \code{gt} tables}
 \usage{
-gt_theme_tier(gt_object, style = "dark", ...)
+gt_theme_tier(
+  gt_object,
+  style = "dark",
+  density = c("comfortable", "compact", "social"),
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{style}{Dark (default, "dark") or Light ("light") table theme}
+\item{style}{Character. The color scheme, \code{"dark"} for a near-black ground or
+\code{"light"} for a white ground. Defaults to \code{"dark"}.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns a styled gt table
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-Apply a tier list theme to a gt table
+Oswald throughout on a near-black (\code{"dark"}) or white (\code{"light"}) ground, with
+a bold title and every column center aligned. Rows are separated by thin black
+borders and horizontal rules are otherwise hidden.
 }
+\details{
+Every body row except the last carries a black bottom border, and the last
+row's border is painted in the ground color so it does not double the edge of
+the table. Pairs with \code{\link[=gt_tiers]{gt_tiers()}}, which builds the tier rows themselves.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{tier_list_example.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_tier()
+gt(head(mtcars)) \%>\% gt_theme_tier(style = "light")
+}
+
+}

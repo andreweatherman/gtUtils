@@ -2,23 +2,51 @@
 % Please edit documentation in R/gt_theme_pl.R
 \name{gt_theme_pl}
 \alias{gt_theme_pl}
-\title{Premier League \code{gt} Table Theme}
+\title{Premier League theme for \code{gt} tables}
 \usage{
-gt_theme_pl(gt_object, ...)
+gt_theme_pl(gt_object, density = c("comfortable", "compact", "social"), ...)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns a styled gt table
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-Apply Premier League theme to a gt table
+DM Sans throughout in the Premier League's deep purple (\verb{#37003c}), with
+muted-purple column labels and a purple rule bracketing the body. Row groups
+render as white labels on a pale lilac fill, and column spanners are bold and
+underlined.
 }
+\details{
+A purple rule closes the column labels and another opens the body, and each
+body row is separated by a purple bottom border. The last body row's bottom
+border is painted white so it does not double the rule that closes the table.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{gt_theme_pl.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_pl()
+}
+
+}

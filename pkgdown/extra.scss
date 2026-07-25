@@ -1,0 +1,458 @@
+/*-- scss:defaults --*/
+
+// `$primary` (set in _pkgdown.yml) is the accessible link/button orange.
+// `$accent-bright` is for large or decorative accents only, where 3:1 is enough.
+$accent-bright: #E8590C !default;
+$ink: #12263F !default;
+$paper: #FBFAF7 !default;
+$surface: #F3EFE8 !default; // warm tint, one step down from paper
+$rule: #E6E0D5 !default; // hairline borders
+$muted: #5A6B7E !default; // secondary text, ~5.3:1 on paper
+
+/*-- scss:rules --*/
+
+// ---------------------------------------------------------------------------
+// Foundations
+// ---------------------------------------------------------------------------
+body {
+  background-color: $paper;
+  color: $ink;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+// pkgdown pushes content 56px below the navbar
+.row > main,
+.row > aside { margin-top: 1.75rem; }
+
+// Oswald is condensed, so ease the tracking off
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3 {
+  color: $ink;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.page-header {
+  border-bottom: 1px solid $rule;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  h1 { letter-spacing: -0.02em; }
+
+  // no logo beside the title on article / reference pages
+  img.logo { display: none; }
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid $rule;
+  opacity: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Links
+// ---------------------------------------------------------------------------
+a {
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  transition: color 0.12s ease;
+}
+a:hover { color: #9A3608; } // deeper orange, holds contrast
+
+// ---------------------------------------------------------------------------
+// Navbar
+// ---------------------------------------------------------------------------
+.navbar {
+  background-color: $paper !important;
+  position: relative;
+  box-shadow: 0 1px 0 rgba($ink, 0.04);
+}
+
+// 5-bar ribbon along the navbar's bottom edge, matching the heights in bars.svg
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: linear-gradient(
+    to bottom,
+    #edbd68 0%, #edbd68 23%,
+    #f2704e 23%, #f2704e 40%,
+    #de5152 40%, #de5152 64%,
+    #a43845 64%, #a43845 81%,
+    #602b53 81%, #602b53 100%
+  );
+}
+
+.navbar-brand {
+  font-family: Oswald, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: $ink !important;
+}
+
+.navbar .nav-link {
+  color: $ink !important;
+  font-weight: 500;
+  position: relative;
+}
+.navbar .nav-link:hover { color: $primary !important; }
+
+.navbar .nav-link.active,
+.navbar .nav-link[aria-current="page"] {
+  color: $primary !important;
+}
+
+// ---------------------------------------------------------------------------
+// Code
+// ---------------------------------------------------------------------------
+pre {
+  background-color: $surface;
+  border: 1px solid $rule;
+  border-radius: 0.5rem;
+}
+
+code {
+  color: #9A3608;
+}
+pre code { color: inherit; }
+
+// inline code gets a faint tinted chip
+p code, li code, td code {
+  background-color: rgba($accent-bright, 0.07);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar / table of contents
+// ---------------------------------------------------------------------------
+// vignettes drop the TOC and run full width
+.template-article .row > aside { display: none; }
+.template-article .row > main {
+  flex: 0 0 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#toc .nav-link,
+.template-article #toc a {
+  color: $muted;
+  border-left: 1px solid $rule;
+  padding-left: 0.85rem;
+}
+#toc .nav-link.active {
+  color: $primary;
+  border-left-color: $primary;
+  font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// Reference index: each function (a <dl>) is a card in a responsive grid
+// ---------------------------------------------------------------------------
+.template-reference-index .section.level2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.5rem;
+  align-items: stretch;
+  margin-bottom: 1.4rem;
+}
+
+// heading + description span the full grid width
+.template-reference-index .section.level2 > h2,
+.template-reference-index .section.level2 > .section-desc {
+  grid-column: 1 / -1;
+}
+.template-reference-index .section.level2 > h2 {
+  margin-top: 0;
+  margin-bottom: 0.1rem;
+  padding-bottom: 0.3rem;
+}
+.template-reference-index .section.level2 > h2::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-top: 0.4rem;
+  background: $accent-bright;
+}
+.template-reference-index .section-desc {
+  color: $muted;
+  margin-bottom: 0;
+}
+.template-reference-index .section-desc :last-child { margin-bottom: 0; }
+
+// the card itself
+.template-reference-index .section.level2 > dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.75rem;
+  background: #FFFFFF;
+  border: 1px solid $rule;
+  border-radius: 0.5rem;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+}
+.template-reference-index .section.level2 > dl:hover {
+  border-color: rgba($accent-bright, 0.55);
+  box-shadow: 0 6px 18px -10px rgba($ink, 0.35);
+  transform: translateY(-2px);
+}
+.template-reference-index dl > dt { margin: 0; padding: 0; }
+.template-reference-index dl > dt code {
+  background: none;
+  padding: 0;
+  font-size: 0.9rem;
+}
+.template-reference-index dl > dt code a { color: $primary; }
+.template-reference-index dl > dd {
+  margin: 0;
+  padding-left: 0; // pkgdown indents dd 1.5rem, cancel it in cards
+  color: $ink;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+// kill pkgdown's :target side-stripe so anchored cards keep their shape
+.template-reference-index dl > dt:target + dd,
+.template-reference-index dl > dt:target {
+  border-left: 0;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Callouts / blockquotes
+// ---------------------------------------------------------------------------
+blockquote {
+  background-color: $surface;
+  border: 1px solid $rule;
+  border-radius: 0.5rem;
+  padding: 0.9rem 1.1rem;
+  color: $ink;
+}
+
+// ---------------------------------------------------------------------------
+// Homepage
+// ---------------------------------------------------------------------------
+.template-home {
+  aside { display: none; }
+  #main {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  // the title is the wordmark svg, sized here in case it falls back to text
+  #main h1 {
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    letter-spacing: -0.03em;
+    line-height: 1.03;
+    margin-bottom: 0.6rem;
+  }
+  #main h1 img {
+    display: block;
+    width: unquote("min(340px, 60%)");
+    height: auto;
+  }
+
+  // tagline, the paragraph right after the title
+  #main h1 + p {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: $muted;
+    max-width: 58ch;
+    margin-bottom: 1.6rem;
+  }
+
+  #main h2 {
+    margin-top: 2.4rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: $muted;
+    font-weight: 600;
+  }
+  #main .section { margin-bottom: 0.5rem; }
+}
+
+// install snippet: the one block of code on the page, so give it the accent.
+// pkgdown's JS hangs the copy button off div.sourceCode, so the width has to be
+// set there. constraining the inner <pre> instead leaves the button anchored to
+// a full-width box and strands it in the right margin
+.home-install div.sourceCode {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  border-radius: 0.5rem;
+  background-color: $ink;
+}
+
+.home-install pre {
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0.75rem 3rem 0.8rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  code, code span { color: #F4EFE7 !important; }
+  code { font-size: inherit; }
+}
+
+.home-install pre::before {
+  content: "R";
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: rgba(#F4EFE7, 0.4);
+  margin-bottom: 0.3rem;
+}
+
+// sit the copy button inside the block, quiet until hovered
+.home-install .btn-copy-ex {
+  right: 6px;
+  top: 6px;
+  background: rgba(#F4EFE7, 0.1);
+  border: 0;
+  color: rgba(#F4EFE7, 0.75);
+  padding: 0.25rem 0.45rem;
+  border-radius: 0.3rem;
+  &:hover {
+    background: rgba(#F4EFE7, 0.2);
+    color: #F4EFE7;
+  }
+}
+
+// pandoc parses the inside of an html block as markdown, so contiguous tags come
+// back wrapped in a <p>. that <p> would be the only grid/flex child. dissolve it
+// so the cards and links reach the layout as direct children
+.home-cards > p,
+.home-links > p {
+  display: contents;
+}
+
+// the home title is the wordmark, so it needs no rule under it
+.template-home .page-header {
+  border-bottom: 0;
+  margin-bottom: 0.4rem;
+}
+
+// links row, sitting under the install block
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin: 1.1rem 0 0.4rem;
+  font-size: 0.95rem;
+
+  a {
+    color: $muted;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.12s ease, border-color 0.12s ease;
+  }
+  a:hover { color: $primary; border-bottom-color: $primary; }
+  i { margin-right: 0.35rem; }
+}
+
+// what's inside: one card per reference group, same shape as the cards on the
+// reference index so the two pages read as one system
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.1rem 1.1rem;
+  background: #FFFFFF;
+  border: 1px solid $rule;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+
+  // the accent edge only arrives on hover, so a grid of six stays calm at rest
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: $accent-bright;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.14s ease;
+  }
+  &:hover {
+    border-color: rgba($accent-bright, 0.55);
+    box-shadow: 0 6px 18px -10px rgba($ink, 0.35);
+    transform: translateY(-2px);
+  }
+  &:hover::before { transform: scaleY(1); }
+}
+
+.home-card-count {
+  font-family: Oswald, sans-serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  font-weight: 600;
+  color: $accent-bright;
+  letter-spacing: -0.02em;
+}
+.home-card-title {
+  margin-top: 0.35rem;
+  font-weight: 600;
+  color: $ink;
+  font-size: 1.02rem;
+}
+.home-card-desc {
+  margin-top: 0.3rem;
+  color: $muted;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.home-more {
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-card,
+  .home-card::before { transition: none; }
+  .home-card:hover { transform: none; }
+}
+
+// ---------------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------------
+.btn-primary {
+  --bs-btn-hover-bg: #9A3608;
+  --bs-btn-hover-border-color: #9A3608;
+  font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+footer {
+  border-top: 1px solid $rule;
+  color: $muted;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  .template-reference-index .section.level2 > dl { transition: none; }
+  .template-reference-index .section.level2 > dl:hover { transform: none; }
+}

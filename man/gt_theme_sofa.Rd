@@ -2,26 +2,61 @@
 % Please edit documentation in R/gt_theme_sofa.R
 \name{gt_theme_sofa}
 \alias{gt_theme_sofa}
-\title{Sofa Score \code{gt} Table Theme}
+\title{SofaScore theme for \code{gt} tables}
 \usage{
-gt_theme_sofa(gt_object, style = "light", ...)
+gt_theme_sofa(
+  gt_object,
+  style = "light",
+  density = c("comfortable", "compact", "social"),
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{style}{Light (default, "light") or Dark ("dark") table theme}
+\item{style}{Character. The color scheme, \code{"light"} for a warm cream ground or
+\code{"dark"} for a dark navy ground. Defaults to \code{"light"}.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns a styled gt table
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-Apply Sofa Score theme to a gt table
+Sofia Sans Condensed throughout on a warm cream (\code{"light"}) or dark navy
+(\code{"dark"}) ground, after SofaScore, with bold column labels and bold row-group
+labels. Column spanners are bold and underlined. Horizontal rules are hidden,
+so the ground alone separates the rows.
 }
+\details{
+The table background, its outer borders, and the last row's bottom border are
+all painted in the chosen ground color, so the rows read as separated by space
+rather than by rules. Row groups are closed with a black bottom border.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{gt_theme_sofa_light.png}{options: width=100\%}}
 \if{html}{\figure{gt_theme_sofa_dark.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_sofa()
+gt(head(mtcars)) \%>\% gt_theme_sofa(style = "dark")
+}
+
+}

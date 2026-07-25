@@ -2,23 +2,60 @@
 % Please edit documentation in R/gt_theme_kenpom.R
 \name{gt_theme_kenpom}
 \alias{gt_theme_kenpom}
-\title{KenPom \code{gt} Table Theme}
+\title{KenPom theme for \code{gt} tables}
 \usage{
-gt_theme_kenpom(gt_object, ...)
+gt_theme_kenpom(
+  gt_object,
+  density = c("comfortable", "compact", "social"),
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns data with an appended HTML column.
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-A theme for styling \code{gt} tables similar to The Athletic.
+Modeled on KenPom's tables. Helvetica Neue type, blue zebra-striped rows, blue
+column labels and row-group bands set over a light-blue fill, and underlined
+spanners. The heading is centered.
 }
+\details{
+The striping is applied by row position, a pale blue (\verb{#F2FAFD}) on odd rows
+and a slightly deeper blue (\verb{#e5ecf9}) on even rows, so it follows the order
+the data is in. A thin black bottom border separates every body row except the
+last. To force the spanner row to render so it can be underlined, the theme
+adds a placeholder spanner and then hides it with \code{display: none} in the
+\code{gt::opt_css()} block. A table id is resolved (or generated) up front so that
+CSS binds to this table alone. \code{density} rescales the finished table, since
+this theme sets its sizes directly rather than deriving them from a scale.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{gt_theme_kenpom.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_kenpom()
+gt(head(mtcars)) \%>\% gt_theme_kenpom(density = "compact")
+}
+
+}

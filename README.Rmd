@@ -13,25 +13,38 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gtUtils
+# ![gtUtils](man/figures/wordmark.svg)
 
-`gtUtils` is a collection of themes, coloring functions, and other utilities to enhance and extend the functionality of the [gt](https://gt.rstudio.com/) package for creating beautiful tables in R.
+Themes, coloring functions, and utilities that extend
+[gt](https://gt.rstudio.com/) for building beautiful tables in R.
 
-If you're looking for more `gt` content, check out my blog -- [featuring visualization walkthroughs and source code!](https://www.bucketsandbytes.com)
-
-## Installation
-
-You can install the development version of `gtUtils` from GitHub:
+## Install
 
 ``` r
 remotes::install_github("andreweatherman/gtUtils")
 ```
 
-## Getting Started
+## What's inside
 
-To get started, please references any of the vignettes below:
+[Themes](https://gtutils.aweatherman.com/reference/index.html#themes) ·
+[Color](https://gtutils.aweatherman.com/reference/index.html#coloring) ·
+[Annotations](https://gtutils.aweatherman.com/reference/index.html#annotations) ·
+[Layout](https://gtutils.aweatherman.com/reference/index.html#layout) ·
+[Saving](https://gtutils.aweatherman.com/reference/index.html#viewing-saving)
 
--   [General Uses](https://gtutils.aweatherman.com/articles/general_uses.html)
--   [Table Themes](https://gtutils.aweatherman.com/articles/table_themes.html)
--   [Border Bars and Stuff](https://gtutils.aweatherman.com/articles/border_bars.html)
--   [Creating Tier Lists](https://gtutils.aweatherman.com/articles/tier_list.html)
+See the [full function reference](https://gtutils.aweatherman.com/reference/index.html)
+for everything the package offers.
+
+## Getting started
+
+- [Styling Headers, Legends, and Captions](https://gtutils.aweatherman.com/articles/styling.html)
+- [Saving and Posting Tables](https://gtutils.aweatherman.com/articles/saving_tables.html)
+- [Building a Schedule Matrix](https://gtutils.aweatherman.com/articles/schedule_matrix.html)
+- [Percentile Bars and Cut Lines](https://gtutils.aweatherman.com/articles/delay_tables.html)
+- [Creating Tier Lists](https://gtutils.aweatherman.com/articles/tier_list.html)
+
+## Links
+
+<a href="https://twitter.com/andreweatherman"><i class="fab fa-twitter" aria-hidden="true"></i> Twitter</a>
+&nbsp;&nbsp;
+<a href="https://www.aweatherman.com/"><i class="fas fa-globe" aria-hidden="true"></i> Personal site</a>

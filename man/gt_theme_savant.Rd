@@ -2,23 +2,55 @@
 % Please edit documentation in R/gt_theme_savant.R
 \name{gt_theme_savant}
 \alias{gt_theme_savant}
-\title{Baseball Savant \code{gt} Table Theme}
+\title{Baseball Savant theme for \code{gt} tables}
 \usage{
-gt_theme_savant(gt_object, ...)
+gt_theme_savant(
+  gt_object,
+  density = c("comfortable", "compact", "social"),
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns a styled gt table
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-Apply Baseball Savant theme to a gt table
+Roboto Condensed throughout, with bold column labels and zebra-striped rows
+under a centered heading, after Baseball Savant. Row groups render as off-white
+labels on a black fill, and column spanners are bold and underlined.
 }
+\details{
+The heading is centered rather than left aligned. Rows are zebra-striped through
+\code{\link[gt:opt_row_striping]{gt::opt_row_striping()}} and horizontal rules are hidden. The last body row's
+bottom border is painted white so it does not double the rule that closes the
+table.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{gt_theme_savant.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_savant()
+}
+
+}

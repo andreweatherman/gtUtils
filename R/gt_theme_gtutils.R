@@ -1,28 +1,56 @@
-#' The gtUtils `gt` Table Theme
+#' gtUtils theme for `gt` tables
 #'
-#' Apply The Athletic theme to a gt table
+#' The package's house theme. A warm cream background, an Almarai body,
+#' Signika Negative titles, column labels and row groups, hairline separators
+#' between rows, and gray row-group bands carrying cream labels. All columns are
+#' centered.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @details
+#' The row separators are a single bottom border in gray (`#8A817C`) applied to
+#' every body row except the last, so the table closes on the background rather
+#' than a rule. The background is a warm cream (`#FFFDF5`), and horizontal rules
+#' are otherwise set transparent. A table id is resolved (or generated) up front
+#' so the `gt::opt_css()` block can pin the closing row border and heading
+#' padding to this table alone.
+#' `density` rescales the finished table, since this theme sets its sizes
+#' directly rather than deriving them from a scale.
+#'
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
 #' @section Figures:
 #' \if{html}{\figure{gt_theme_gtutils.png}{options: width=100\%}}
 #'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_gtutils()
+#' gt(head(mtcars)) %>% gt_theme_gtutils(density = "compact")
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_gtutils <- function(gt_object, ...) {
-  stopifnot(`'gt_object' must be a 'gt_tbl', have you accidentally passed raw data?` = "gt_tbl" %in%
-    class(gt_object))
+gt_theme_gtutils <- function(gt_object,
+                             density = c("comfortable", "compact", "social"),
+                             ...) {
+  .check_gt(gt_object)
 
-  table_id <- subset(gt_object[["_options"]], parameter == "table_id")$value[[1]]
-
-  if (is.na(table_id)) {
-    table_id <- gt::random_id()
-    opt_position <- which("table_id" %in% gt_object[["_options"]][["parameter"]])[[1]]
-    gt_object[["_options"]][["value"]][[opt_position]] <- table_id
-  }
-
+  res <- .table_id(gt_object)
+  gt_object <- res$object
+  table_id <- res$id
   data <- gt_object[["_data"]]
 
   table <- gt_object %>%
@@ -163,7 +191,7 @@ gt_theme_gtutils <- function(gt_object, ...) {
       )
     ))
 
-  return(table)
+  .theme_scale_output(table, density)
 
 }
 

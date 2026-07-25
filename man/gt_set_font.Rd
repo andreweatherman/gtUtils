@@ -2,23 +2,62 @@
 % Please edit documentation in R/gt_set_font.R
 \name{gt_set_font}
 \alias{gt_set_font}
-\title{Set Font Family for All Parts of a gt Table}
+\title{Set one font family across a whole \code{gt} table}
 \usage{
-gt_set_font(gt_table, font_family, from_google_font = TRUE)
+gt_set_font(
+  gt_object,
+  font_family,
+  from_google_font = TRUE,
+  weight = NULL,
+  style = NULL,
+  gt_table = NULL
+)
 }
 \arguments{
-\item{gt_table}{A gt table object.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{font_family}{The font family to apply to the entire table.}
+\item{font_family}{Character. The font family to apply to the whole table.}
 
-\item{from_goog_font}{Should the font be pulled from Google Fonts (TRUE;
-default) or from your local machine (FALSE)}
+\item{from_google_font}{Logical. Should the font be pulled from Google Fonts
+through \code{gt::google_font()}? \code{FALSE} treats \code{font_family} as a font already
+installed on the local machine. Defaults to \code{TRUE}.}
+
+\item{weight}{The font weight applied to every part, passed to
+\code{gt::cell_text()}. Either a keyword such as \code{"bold"} or a numeric weight.
+Defaults to \code{NULL}, which leaves the weight alone.}
+
+\item{style}{Character. The font style applied to every part, one of
+\code{"normal"}, \code{"italic"}, or \code{"oblique"}. Defaults to \code{NULL}, which leaves the
+style alone.}
+
+\item{gt_table}{Deprecated. Use \code{gt_object}.}
 }
 \value{
-A \code{gt} table with the specified font family applied to all customizable parts.
+Returns a modified \code{gt} table with the font family applied to every
+covered part.
 }
 \description{
-This function sets the font family for all customizable parts of a \code{gt} table
-including title, table body, labels, label spanners, and more. This is a convenience
-function if you want to quickly apply a font to your table.
+Applies a single font family to every styleable part of a \code{gt} table in one
+call: the title and subtitle, the stubhead, column spanners and labels, row
+groups, the stub, the body, footnotes, and source notes. Setting the same font
+through \code{gt::tab_options()} means naming each \verb{*_font} option in turn.
+}
+\details{
+The font is applied with a single \code{gt::tab_style()} over a list of cell
+locations covering each part of the table. Summary and grand-summary cells are
+not included, so a font set here does not reach them. When \code{from_google_font}
+is \code{TRUE} the family is wrapped in \code{gt::google_font()}, which adds the import
+so the font renders in an exported table without relying on it being installed
+locally.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars)) \%>\% gt_set_font("Oswald")
+
+# use a font already installed locally
+gt(head(iris)) \%>\% gt_set_font("Helvetica", from_google_font = FALSE)
+}
+
 }

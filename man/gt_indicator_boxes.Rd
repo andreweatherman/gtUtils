@@ -2,10 +2,11 @@
 % Please edit documentation in R/gt_indicator_boxes.R
 \name{gt_indicator_boxes}
 \alias{gt_indicator_boxes}
-\title{Add colored indicator boxes to a gt table}
+\title{Add colored indicator boxes to a \code{gt} table}
 \usage{
 gt_indicator_boxes(
   gt_object,
+  columns = NULL,
   key_columns = NULL,
   indicator_vals = c(0, 1),
   indicator_rule = function(x) x == indicator_vals[2],
@@ -19,65 +20,107 @@ gt_indicator_boxes(
   border_color = NULL,
   border_width = 0.25,
   box_width = 20,
-  box_height = 20
+  box_height = 20,
+  text_size = 12,
+  text_weight = "bold"
 )
 }
 \arguments{
-\item{gt_object}{A gt table object.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{key_columns}{A character vector of column names that should not be
-transformed. Defaults to NULL.}
+\item{columns}{The columns to convert to boxes, using tidyselect. Defaults to
+\code{NULL}, which converts every column not named in \code{key_columns}.}
 
-\item{indicator_vals}{A numeric vector of length 2 representing the "no" and
-"yes" values (defaults to c(0, 1)).}
+\item{key_columns}{The columns to leave untouched, using tidyselect. Every
+other column is converted. Kept for the inverted way of saying the same
+thing; give this or \code{columns}, not both. Defaults to \code{NULL}.}
 
-\item{indicator_rule}{A function that defines the rule for when the box
-should be colored. Defaults to checking if the value is equal to
+\item{indicator_vals}{Numeric. A length-2 vector giving the "no" and "yes"
+values. Defaults to \code{c(0, 1)}.}
+
+\item{indicator_rule}{A function deciding when a box is colored. It receives
+the column values, and optionally the column name as a second argument, and
+returns a logical vector. Defaults to testing equality with
 \code{indicator_vals[2]}.}
 
-\item{color_yes}{A character string representing the color for "yes"
-indicators (default is "#FCCF10").}
+\item{color_yes}{Character. The fill for boxes meeting the rule. Defaults to
+\code{"#FCCF10"}.}
 
-\item{color_no}{A character string representing the color for "no" indicators
-(default is "#EEEEEE").}
+\item{color_no}{Character. The fill for boxes not meeting the rule. Defaults to
+\code{"#EEEEEE"}.}
 
-\item{show_na_as_na}{Logical. Whether to display NA as NA (without coloring).
-Defaults to FALSE, which treats NA as "NO".}
+\item{show_na_as_na}{Logical. Should \code{NA} be shown as \code{NA} rather than treated
+as "no"? Defaults to \code{FALSE}.}
 
-\item{show_text}{Logical. Whether to display the text inside the indicator
-boxes. Defaults to FALSE.}
+\item{show_text}{Logical. Should the formatted value be printed inside the box?
+Defaults to \code{FALSE}.}
 
-\item{show_only}{A character string ("yes", "no", or "NA") indicating if text
-should only be shown for "yes", "no", or "NA" values. Defaults to NULL
-(text for all values is shown).}
+\item{show_only}{Character. Restrict printed text to one class of box, one of
+\code{"yes"}, \code{"no"}, or \code{"NA"}. Defaults to \code{NULL}, which prints text for all.}
 
-\item{per_column_formats}{A list where each key is a column name, and each
-value is a list of formatting options (\code{digits}, \code{format_type}, \code{suffix})
-for that column.}
+\item{per_column_formats}{A named list keyed by column name, each element a
+list of formatting options (\code{digits}, \code{format_type}, \code{suffix}) for that
+column. Defaults to \code{NULL}.}
 
-\item{color_na}{A character string representing the color for NA indicators.
-If not provided, defaults to \code{color_no}.}
+\item{color_na}{Character. The fill for \code{NA} boxes. Defaults to \code{NULL}, which
+uses \code{color_no}.}
 
-\item{border_color}{A character string representing the color of the border
-around the boxes. Defaults to NULL (no border).}
+\item{border_color}{Character. The border color around the boxes. Defaults to
+\code{NULL}, no border.}
 
-\item{border_width}{Numeric. The width of the border in pixels. Defaults to
-0.25.}
+\item{border_width}{Numeric. The border width in pixels. Defaults to \code{0.25}.}
 
-\item{box_width}{Numeric. The default width of the box in pixels. Defaults to
-20.}
+\item{box_width}{Numeric. The box width in pixels, used when \code{show_text} is
+\code{FALSE}. Defaults to \code{20}.}
 
-\item{box_height}{Numeric. The default height of the box in pixels. Defaults
-to 20.}
+\item{box_height}{Numeric. The box height in pixels. Defaults to \code{20}.}
+
+\item{text_size}{Numeric. The font size of the box text in pixels, used when
+\code{show_text} is \code{TRUE}. Defaults to \code{12}.}
+
+\item{text_weight}{Character. The font weight of the box text. Defaults to
+\code{"bold"}.}
 }
 \value{
-A modified gt table where the specified columns are replaced with
-HTML to display colored boxes.
+Returns a modified \code{gt} table with the converted columns shown as
+colored boxes.
 }
 \description{
-This function takes a gt table and adds colored boxes as indicators for
-specific columns. By default, the values in the columns are assessed based on
-the \code{indicator_vals} argument, where the first value represents "no"
-(uncolored) and the second value represents "yes" (colored). Users can also
-define custom rules using the \code{indicator_rule} argument.
+Replaces column values with colored boxes, filled when a value meets a rule
+and left neutral otherwise. By default the box is colored when a value equals
+the second element of \code{indicator_vals} (\code{1}) and left \code{color_no} when it equals
+the first (\code{0}); supply \code{indicator_rule} for any other test. Name the columns
+to convert with \code{columns}, or the ones to leave alone with \code{key_columns}.
+}
+\details{
+Every column outside \code{key_columns} is replaced with an HTML span through
+\code{gt::text_transform()}, and the transformed columns are then center-aligned.
+The rule is applied to the numeric coercion of each column, so text values
+become \code{NA}; \code{NA} cells take \code{color_na} (falling back to \code{color_no}) unless
+\code{show_na_as_na} keeps them labeled \code{NA}. Box text is set to black or white,
+whichever measures higher contrast against the fill.
+
+When \code{show_text} is \code{TRUE} the box widens to fit the widest formatted value in
+the column; otherwise it is fixed at \code{box_width}. \code{indicator_rule} may accept a
+second argument, the column name, which allows a different test per column.
+}
+\examples{
+\dontrun{
+library(gt)
+
+roster <- data.frame(
+  player = c("A", "B", "C"),
+  starter = c(1, 0, 1),
+  injured = c(0, 0, 1),
+  captain = c(1, 0, 0)
+)
+
+gt(roster) \%>\% gt_indicator_boxes(key_columns = "player")
+
+# print the underlying values and draw a border
+gt(roster) \%>\%
+  gt_indicator_boxes(key_columns = "player", show_text = TRUE,
+                     border_color = "#333333")
+}
+
 }

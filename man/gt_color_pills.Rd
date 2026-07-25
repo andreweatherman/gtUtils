@@ -2,11 +2,12 @@
 % Please edit documentation in R/gt_color_pills.R
 \name{gt_color_pills}
 \alias{gt_color_pills}
-\title{Add color pills to a \code{gt} table column}
+\title{Add color pills to \code{gt} table columns}
 \usage{
 gt_color_pills(
   gt_object,
   columns,
+  rows = NULL,
   palette = c("#C84630", "#5DA271"),
   fill_type = "continuous",
   rank_order = "desc",
@@ -20,53 +21,119 @@ gt_color_pills(
   outline_width = 0.25,
   pal_type = "discrete",
   pill_height = 25,
+  text_color = NULL,
+  na_color = NULL,
   ...
 )
 }
 \arguments{
 \item{gt_object}{A \code{gt} table object to modify.}
 
-\item{columns}{A column or set of columns within the \code{gt} table to apply the color pills.}
+\item{columns}{The columns to fill with pills, using tidyselect.}
 
-\item{palette}{A color palette to use. If you want to use a palette from \code{paletteer},
-specify the palette as \code{package::palette}. Defaults to \code{c("#C84630", "#5DA271")}.}
+\item{rows}{The rows to fill. Either an expression evaluated against the
+table's data, such as \code{mpg > 20}, or a numeric vector of row indices. Rows
+left out keep their raw value. If \code{NULL}, every row is filled. Defaults to
+\code{NULL}.}
 
-\item{fill_type}{Character. Either \code{"rank"} or \code{"continuous"}, determining whether to fill
-based on ordinal rank or continuous values.}
+\item{palette}{A vector of hex colors, or a \code{paletteer} palette given as
+\code{package::palette}. Defaults to \code{c("#C84630", "#5DA271")}.}
 
-\item{rank_order}{Character. Either \code{"asc"} or \code{"desc"}, used when \code{fill_type} is \code{"rank"}.
-Defaults to \code{"desc"}.}
+\item{fill_type}{Character. Either \code{"rank"} or \code{"continuous"}, choosing whether
+color follows ordinal rank or the raw values. Defaults to \code{"continuous"}.}
 
-\item{digits}{Integer. The number of decimal places to round the values to. Defaults to \code{NULL}.}
+\item{rank_order}{Character. Either \code{"asc"} or \code{"desc"}, used when \code{fill_type}
+is \code{"rank"}. Defaults to \code{"desc"}.}
 
-\item{domain}{A numeric vector specifying the domain for continuous color scaling.
-If \code{NULL}, the domain will be automatically determined from the data. Defaults to \code{NULL}.}
+\item{digits}{Integer. Decimal places to round the printed value to. Defaults
+to \code{NULL}.}
 
-\item{format_type}{Character. The format of the values in the column. Options are \code{"number"},
-\code{"comma"}, \code{"currency"}, or \code{"percent"}. Defaults to \code{"number"}.}
+\item{domain}{Numeric. A length-2 vector giving the value range mapped onto the
+palette. If \code{NULL}, the observed range of the column is used and a warning is
+issued. Defaults to \code{NULL}.}
 
-\item{scale_percent}{Logical. Should the values be scaled to percent (multiplied by 100)? Defaults to \code{TRUE}.}
+\item{format_type}{Character. How to format the printed value. One of
+\code{"number"}, \code{"comma"}, \code{"currency"}, or \code{"percent"}. Defaults to \code{"number"}.}
 
-\item{suffix}{Optional. A character string to append as a suffix to the formatted value (e.g., "M", "K", "lbs"). Defaults to \code{""}.}
+\item{scale_percent}{Logical. When \code{format_type} is \code{"percent"}, should values
+be multiplied by 100? Defaults to \code{TRUE}.}
 
-\item{reverse}{Logical. Should the color palette be reversed? Defaults to \code{FALSE}.}
+\item{suffix}{Character. A string appended to each formatted value, such as
+\code{"M"}, \code{"K"}, or \code{"lbs"}. Defaults to \code{""}.}
 
-\item{outline_color}{Optional. A hex color code for the border around the pills. Defaults to \code{NULL}.}
+\item{reverse}{Logical. Should the palette be reversed? Defaults to \code{FALSE}.}
 
-\item{outline_width}{Numeric. The width of the border around the pills in pixels. Defaults to \code{0.25}.}
+\item{outline_color}{Optional. A hex color for a border around each pill.
+Defaults to \code{NULL}, no border.}
 
-\item{pal_type}{Character. Either \code{"discrete"} or \code{"continuous"}, used when applying
-\code{paletteer} palettes. Defaults to \code{"discrete"}.}
+\item{outline_width}{Numeric. The border width in pixels. Defaults to \code{0.25}.}
 
-\item{pill_height}{Numeric. The height of each color pill in pixels. Defaults to \code{25}.}
+\item{pal_type}{Character. Which \code{paletteer} registry to look a
+\code{package::palette} string up in, \code{"discrete"} or \code{"continuous"}. The other
+registry is tried as a fallback, so this rarely needs setting. Defaults to
+\code{"discrete"}.}
+
+\item{pill_height}{Numeric. The height of each pill in pixels. Defaults to \code{25}.}
+
+\item{text_color}{Optional. A hex color for the pill text. When \code{NULL}, the
+text color is chosen for contrast against each pill's fill. Defaults to
+\code{NULL}.}
+
+\item{na_color}{Optional. A hex color for the pill drawn over a missing value.
+When \code{NULL}, a missing value is left blank with no pill. Defaults to \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{scales::col_numeric}.}
 }
 \value{
-Returns a modified \code{gt} table with color pills applied to the specified columns.
+Returns a modified \code{gt} table with color pills in the selected columns.
 }
 \description{
-This function adds color pills to a specified column in a \code{gt} table, allowing
-the column's values to be filled with color based on ordinal ranking or continuous
-values. You can provide a custom domain and palette, with optional \code{paletteer} support.
+Renders values as rounded color pills, filled from a palette by either the raw
+value or the ordinal rank. Accepts a plain vector of hex colors or a
+\code{paletteer} palette, and an explicit domain or one taken from the data.
+\code{\link[=gt_color_ranks]{gt_color_ranks()}} fills the whole cell background instead of a pill.
+}
+\details{
+Pills are drawn as HTML spans through \code{gt::text_transform()}, so they survive
+\code{gtsave()}. The fill is mapped with \code{scales::col_numeric()} over \code{domain}, and
+the text is set to black or white, whichever measures higher contrast against
+that fill, unless \code{text_color} is set. A missing value takes an \code{na_color}
+pill, or is left blank when \code{na_color} is \code{NULL}.
+
+Selecting several columns maps them all onto \strong{one} \code{domain}, taken from the
+selection as a whole when \code{domain} is unset, so their colors stay comparable.
+Pill width is worked out \strong{per column}, in \code{ch} units, so each column's pills
+line up with each other rather than with the widest value in the selection.
+With \code{fill_type = "rank"}, each column is ranked against itself.
+
+When \code{fill_type} is \code{"rank"}, ranks are computed with \code{rank()} using averaged
+ties, then flipped when \code{rank_order} is \code{"desc"} so the top value anchors the
+high end of the palette. Leaving \code{domain} unset falls back to the observed
+range and warns, since the color mapping then depends on the data present.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars)) \%>\% gt_color_pills(mpg, domain = c(10, 35))
+
+# several columns on one shared domain
+gt(head(mtcars)) \%>\% gt_color_pills(c(disp, hp), domain = c(50, 500))
+
+# tidyselect works too
+gt(head(mtcars)) \%>\% gt_color_pills(where(is.numeric), domain = c(0, 500))
+
+# only the rows that clear a threshold; the rest keep their raw value
+gt(head(mtcars)) \%>\% gt_color_pills(mpg, rows = mpg > 20, domain = c(10, 35))
+
+# color by rank rather than value, with a paletteer palette
+gt(head(mtcars)) \%>\%
+  gt_color_pills(hp, fill_type = "rank", palette = "viridis::mako",
+                 digits = 0)
+}
+
+}
+\seealso{
+\code{\link[=gt_color_ranks]{gt_color_ranks()}} for filling the whole cell, and
+\code{\link[=gt_legend_continuous]{gt_legend_continuous()}} for a legend explaining the scale.
 }

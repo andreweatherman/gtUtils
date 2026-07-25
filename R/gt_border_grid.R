@@ -1,23 +1,33 @@
 #' Add a border grid to a `gt` table
 #'
-#' This function adds column and row borders to a `gt` table, creating a
-#' grid-like appearance. It can optionally include borders for column and row
+#' Draws borders between every column and every row of a `gt` table, giving it a
+#' full grid, with an option to extend the borders around the column and row
 #' labels.
 #'
 #' @param gt_object A `gt` table object to modify.
-#' @param color A character string representing the color of the borders
-#'   (default is `"black"`).
-#' @param weight A numeric value specifying the thickness of the borders in
-#'   pixels (default is `1`).
-#' @param include_labels Logical. Whether to include borders around row and
-#'   column labels (default is `FALSE`).
+#' @param color Character. The border color. Defaults to `"black"`.
+#' @param weight Numeric. The border thickness in pixels. Defaults to `1`.
+#' @param include_labels Logical. Should the borders extend around the row and
+#'   column labels? Defaults to `FALSE`.
 #'
-#' @details The `gt_border_grid` function adds a grid to a `gt` table by
-#' applying column and row borders. It uses the `gt_add_divider` function from
-#' `gtExtras` to add column borders and applies custom CSS for row borders. The
-#' function also generates a random table ID if one is not provided.
+#' @details
+#' Column borders are drawn with `gtExtras::gt_add_divider()` on every column but
+#' the last, and the row borders are added as scoped CSS on the `.gt_row` top
+#' border. A table id is resolved or generated first, since that CSS is keyed on
+#' `#<table_id>`.
 #'
-#' @return A `gt` table object with the grid borders applied.
+#' @returns Returns a modified `gt` table with the grid borders applied.
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#'
+#' gt(head(mtcars)) %>% gt_border_grid()
+#'
+#' # heavier gray lines, including around the labels
+#' gt(head(iris)) %>%
+#'   gt_border_grid(color = "#BBBBBB", weight = 2, include_labels = TRUE)
+#' }
 #'
 #' @importFrom gt opt_css
 #' @importFrom gtExtras gt_add_divider
@@ -27,13 +37,11 @@ gt_border_grid <- function(gt_object,
                            weight = 1,
                            include_labels = FALSE) {
 
-  table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
+  .check_gt(gt_object)
 
-  if (is.na(table_id)) {
-    table_id <- gt::random_id()
-    opt_position <- which("table_id" %in% gt_object[["_options"]][["parameter"]])[[1]]
-    gt_object[["_options"]][["value"]][[opt_position]] <- table_id
-  }
+  res <- .table_id(gt_object)
+  gt_object <- res$object
+  table_id <- res$id
 
   gt_object %>%
     gtExtras::gt_add_divider(columns = -dplyr::last_col(),

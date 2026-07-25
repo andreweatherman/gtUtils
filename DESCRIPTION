@@ -1,30 +1,48 @@
 Package: gtUtils
 Title: Enhancements and Utilities for the gt Package
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     person("Andrew", "Weatherman", , "andrew@aweatherman.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: A collection of themes, formatters, and annotation helpers that
+    extend the 'gt' package. Includes editorial and broadcast-style table themes,
+    continuous color legends, positional cut lines, significance notation,
+    outlier flagging, and utilities for cropping and padding saved tables for
+    publication or social media.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
+    base64enc,
+    cli,
+    commonmark,
     dplyr,
+    fontawesome,
     glue,
+    grDevices,
     gt,
     gtExtras,
     htmltools,
+    magick,
+    magrittr,
+    paletteer,
     rlang,
-    scales
+    scales,
+    stats,
+    tidyselect,
+    tools,
+    utils
 Suggests: 
     knitr,
-    magick,
-    purrr,
     rmarkdown,
     webshot2
+Config/Needs/website:
+    pkgload,
+    jsonlite,
+    tibble
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
 LazyData: true
 URL: https://gtutils.aweatherman.com/, https://andreweatherman.github.io/gtUtils/
-BugReports: https://github.com/andreweatherman/gtUtils
+BugReports: https://github.com/andreweatherman/gtUtils/issues

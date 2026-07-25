@@ -1,63 +1,123 @@
-#' Add colored indicator boxes to a gt table
+#' Add colored indicator boxes to a `gt` table
 #'
-#' This function takes a gt table and adds colored boxes as indicators for
-#' specific columns. By default, the values in the columns are assessed based on
-#' the `indicator_vals` argument, where the first value represents "no"
-#' (uncolored) and the second value represents "yes" (colored). Users can also
-#' define custom rules using the `indicator_rule` argument.
+#' Replaces column values with colored boxes, filled when a value meets a rule
+#' and left neutral otherwise. By default the box is colored when a value equals
+#' the second element of `indicator_vals` (`1`) and left `color_no` when it equals
+#' the first (`0`); supply `indicator_rule` for any other test. Name the columns
+#' to convert with `columns`, or the ones to leave alone with `key_columns`.
 #'
-#' @param gt_object A gt table object.
-#' @param key_columns A character vector of column names that should not be
-#'   transformed. Defaults to NULL.
-#' @param indicator_vals A numeric vector of length 2 representing the "no" and
-#'   "yes" values (defaults to c(0, 1)).
-#' @param indicator_rule A function that defines the rule for when the box
-#'   should be colored. Defaults to checking if the value is equal to
+#' @param gt_object A `gt` table object to modify.
+#' @param columns The columns to convert to boxes, using tidyselect. Defaults to
+#'   `NULL`, which converts every column not named in `key_columns`.
+#' @param key_columns The columns to leave untouched, using tidyselect. Every
+#'   other column is converted. Kept for the inverted way of saying the same
+#'   thing; give this or `columns`, not both. Defaults to `NULL`.
+#' @param indicator_vals Numeric. A length-2 vector giving the "no" and "yes"
+#'   values. Defaults to `c(0, 1)`.
+#' @param indicator_rule A function deciding when a box is colored. It receives
+#'   the column values, and optionally the column name as a second argument, and
+#'   returns a logical vector. Defaults to testing equality with
 #'   `indicator_vals[2]`.
-#' @param color_yes A character string representing the color for "yes"
-#'   indicators (default is "#FCCF10").
-#' @param color_no A character string representing the color for "no" indicators
-#'   (default is "#EEEEEE").
-#' @param show_na_as_na Logical. Whether to display NA as NA (without coloring).
-#'   Defaults to FALSE, which treats NA as "NO".
-#' @param show_text Logical. Whether to display the text inside the indicator
-#'   boxes. Defaults to FALSE.
-#' @param show_only A character string ("yes", "no", or "NA") indicating if text
-#'   should only be shown for "yes", "no", or "NA" values. Defaults to NULL
-#'   (text for all values is shown).
-#' @param per_column_formats A list where each key is a column name, and each
-#'   value is a list of formatting options (`digits`, `format_type`, `suffix`)
-#'   for that column.
-#' @param color_na A character string representing the color for NA indicators.
-#'   If not provided, defaults to `color_no`.
-#' @param border_color A character string representing the color of the border
-#'   around the boxes. Defaults to NULL (no border).
-#' @param border_width Numeric. The width of the border in pixels. Defaults to
-#'   0.25.
-#' @param box_width Numeric. The default width of the box in pixels. Defaults to
-#'   20.
-#' @param box_height Numeric. The default height of the box in pixels. Defaults
-#'   to 20.
+#' @param color_yes Character. The fill for boxes meeting the rule. Defaults to
+#'   `"#FCCF10"`.
+#' @param color_no Character. The fill for boxes not meeting the rule. Defaults to
+#'   `"#EEEEEE"`.
+#' @param show_na_as_na Logical. Should `NA` be shown as `NA` rather than treated
+#'   as "no"? Defaults to `FALSE`.
+#' @param show_text Logical. Should the formatted value be printed inside the box?
+#'   Defaults to `FALSE`.
+#' @param show_only Character. Restrict printed text to one class of box, one of
+#'   `"yes"`, `"no"`, or `"NA"`. Defaults to `NULL`, which prints text for all.
+#' @param per_column_formats A named list keyed by column name, each element a
+#'   list of formatting options (`digits`, `format_type`, `suffix`) for that
+#'   column. Defaults to `NULL`.
+#' @param color_na Character. The fill for `NA` boxes. Defaults to `NULL`, which
+#'   uses `color_no`.
+#' @param border_color Character. The border color around the boxes. Defaults to
+#'   `NULL`, no border.
+#' @param border_width Numeric. The border width in pixels. Defaults to `0.25`.
+#' @param box_width Numeric. The box width in pixels, used when `show_text` is
+#'   `FALSE`. Defaults to `20`.
+#' @param box_height Numeric. The box height in pixels. Defaults to `20`.
+#' @param text_size Numeric. The font size of the box text in pixels, used when
+#'   `show_text` is `TRUE`. Defaults to `12`.
+#' @param text_weight Character. The font weight of the box text. Defaults to
+#'   `"bold"`.
 #'
-#' @returns A modified gt table where the specified columns are replaced with
-#'   HTML to display colored boxes.
+#' @details
+#' Every column outside `key_columns` is replaced with an HTML span through
+#' `gt::text_transform()`, and the transformed columns are then center-aligned.
+#' The rule is applied to the numeric coercion of each column, so text values
+#' become `NA`; `NA` cells take `color_na` (falling back to `color_no`) unless
+#' `show_na_as_na` keeps them labeled `NA`. Box text is set to black or white,
+#' whichever measures higher contrast against the fill.
+#'
+#' When `show_text` is `TRUE` the box widens to fit the widest formatted value in
+#' the column; otherwise it is fixed at `box_width`. `indicator_rule` may accept a
+#' second argument, the column name, which allows a different test per column.
+#'
+#' @returns Returns a modified `gt` table with the converted columns shown as
+#'   colored boxes.
 #'
 #' @importFrom gt text_transform cells_body
 #' @importFrom glue glue
-#' @importFrom purrr reduce
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#'
+#' roster <- data.frame(
+#'   player = c("A", "B", "C"),
+#'   starter = c(1, 0, 1),
+#'   injured = c(0, 0, 1),
+#'   captain = c(1, 0, 0)
+#' )
+#'
+#' gt(roster) %>% gt_indicator_boxes(key_columns = "player")
+#'
+#' # print the underlying values and draw a border
+#' gt(roster) %>%
+#'   gt_indicator_boxes(key_columns = "player", show_text = TRUE,
+#'                      border_color = "#333333")
+#' }
+#'
 #' @export
-gt_indicator_boxes <- function(gt_object, key_columns = NULL,
+gt_indicator_boxes <- function(gt_object, columns = NULL, key_columns = NULL,
                                indicator_vals = c(0, 1),
                                indicator_rule = function(x) x == indicator_vals[2],
                                color_yes = "#FCCF10", color_no = "#EEEEEE",
                                show_na_as_na = FALSE, show_text = FALSE,
                                show_only = NULL, per_column_formats = NULL,
                                color_na = NULL, border_color = NULL, border_width = 0.25,
-                               box_width = 20, box_height = 20) {
+                               box_width = 20, box_height = 20,
+                               text_size = 12, text_weight = "bold") {
+
+  .check_gt(gt_object)
 
   color_na <- color_na %||% color_no
   data <- gt_object[["_data"]]
-  cols_to_transform <- setdiff(names(data), key_columns)
+
+  # `columns` names what to convert, matching the rest of the package.
+  # `key_columns` names what to leave alone, which is the older inverted form.
+  cols_q <- rlang::enquo(columns)
+  keys_q <- rlang::enquo(key_columns)
+  if (!rlang::quo_is_null(cols_q) && !rlang::quo_is_null(keys_q)) {
+    cli::cli_abort(c(
+      "Give either {.arg columns} or {.arg key_columns}, not both.",
+      "i" = "{.arg columns} names the columns to convert to boxes.",
+      "i" = "{.arg key_columns} names the columns to leave alone."
+    ))
+  }
+  cols_to_transform <- if (!rlang::quo_is_null(cols_q)) {
+    names(dplyr::select(data, !!cols_q))
+  } else if (!rlang::quo_is_null(keys_q)) {
+    setdiff(names(data), names(dplyr::select(data, !!keys_q)))
+  } else {
+    names(data)
+  }
+  if (!length(cols_to_transform)) {
+    cli::cli_abort("No columns left to convert to boxes.")
+  }
 
   border_style <- if (!is.null(border_color)) {
     glue::glue("border: {border_width}px solid {border_color};")
@@ -74,18 +134,23 @@ gt_indicator_boxes <- function(gt_object, key_columns = NULL,
       value <- value * 100
     }
 
+    # no digits: format naturally, so a whole number does not gain trailing zeros
+    big <- if (format_type %in% c("comma", "currency")) "," else ""
+    core <- if (is.null(digits)) {
+      format(value, trim = TRUE, big.mark = big, scientific = FALSE)
+    } else {
+      formatC(value, format = "f", big.mark = big, digits = digits)
+    }
+
     formatted_value <- switch(format_type,
-                              "number" = formatC(value, format = "f", digits = digits),
-                              "comma" = formatC(value, format = "f", big.mark = ",", digits = digits),
-                              "currency" = paste0("$", formatC(value, format = "f", big.mark = ",", digits = digits)),
-                              "percent" = paste0(formatC(value, format = "f", digits = digits), "%"),
-                              as.character(value))
+                              "currency" = paste0("$", core),
+                              "percent" = paste0(core, "%"),
+                              core)
 
     return(paste0(formatted_value, suffix))
   }
 
-  gt_object <- purrr::reduce(
-    cols_to_transform,
+  gt_object <- Reduce(
     function(tbl, col_name) {
       col_format <- per_column_formats[[col_name]] %||% list()
       col_digits <- col_format$digits %||% NULL
@@ -115,7 +180,7 @@ gt_indicator_boxes <- function(gt_object, key_columns = NULL,
             }
 
             color[is.na(color)] <- color_no
-            text_color <- gt:::ideal_fgnd_color(color)
+            text_color <- .theme_on_color(color)
 
             formatted_value <- format_value(numeric_x, col_digits, col_format_type, col_suffix)
 
@@ -139,11 +204,12 @@ gt_indicator_boxes <- function(gt_object, key_columns = NULL,
               box_width_final <- box_width
             }
 
-            glue::glue("<span style='display:inline-block; width:{box_width_final}px; height:{box_height}px; line-height:{box_height}px; background-color: {color}; color: {text_color}; vertical-align:middle; margin:4px 1px; font-size: 12px; font-weight: bold; text-align:center; {border_style}'>{text_content}</span>")
+            glue::glue("<span style='display:inline-block; width:{box_width_final}px; height:{box_height}px; line-height:{box_height}px; background-color: {color}; color: {text_color}; vertical-align:middle; margin:4px 1px; font-size: {text_size}px; font-weight: {text_weight}; text-align:center; {border_style}'>{text_content}</span>")
           }
         )
     },
-    .init = gt_object
+    cols_to_transform,
+    init = gt_object
   )
 
   gt_object %>%

@@ -5,16 +5,20 @@
 \title{Add stacked column headers with subtitles to a \code{gt} table}
 \usage{
 gt_column_subheaders(
-  gt_table,
+  gt_object,
   heading_color = "black",
   subtitle_color = "#808080",
   heading_weight = "bold",
   subtitle_weight = "normal",
-  ...
+  heading_size = 14,
+  subtitle_size = 10,
+  font = NULL,
+  ...,
+  gt_table = NULL
 )
 }
 \arguments{
-\item{gt_table}{A \code{gt} table object to modify.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
 \item{heading_color}{Character. Color for the main heading text. Defaults to \code{"black"}.}
 
@@ -24,33 +28,52 @@ gt_column_subheaders(
 
 \item{subtitle_weight}{Character. Font weight for the subtitle. Defaults to \code{"normal"}.}
 
-\item{...}{Named arguments where each name corresponds to a column in the \code{gt} table
-and each value is a list containing two elements: \code{heading} (the main heading) and
-\code{subtitle} (the subtitle text). If a column is not included, it will use the column
-name as the heading and display a non-breaking space (\verb{&nbsp;}) as the subtitle.}
+\item{heading_size}{Numeric. Font size of the main heading in pixels. Defaults to \code{14}.}
+
+\item{subtitle_size}{Numeric. Font size of the subtitle in pixels. Defaults to \code{10}.}
+
+\item{font}{Optional. A font family applied to both lines. It is set as a CSS
+\code{font-family} and is not imported, so it must be available on the machine
+rendering the table or loaded by the theme. Defaults to \code{NULL}.}
+
+\item{...}{Named arguments where each name is a column in the \code{gt} table and each
+value is a list with two elements: \code{heading} (the main heading) and \code{subtitle}
+(the subtitle text). A column left out of \code{...} uses its column name as the
+heading and a non-breaking space (\verb{&nbsp;}) as the subtitle.}
+
+\item{gt_table}{Deprecated. Use \code{gt_object}.}
 }
 \value{
 Returns a modified \code{gt} table with stacked headers and subtitles.
 }
 \description{
-This function creates stacked column headers in a \code{gt} table, where each column has a
-customizable main heading and subtitle, along with options to set the colors and
-font weights for both the heading and subtitle.
+Replaces each column label with a two-line header: a main heading stacked over
+a smaller subtitle. The heading and subtitle colors and font weights are set
+through arguments, and the per-column heading and subtitle text is supplied
+through \code{...}.
 }
 \details{
-The function iterates over the columns of the \code{gt} table and applies a two-level header
-for each column: a customizable main heading and a smaller, customizable subtitle. If no
-subtitle or heading is provided for a column, the column name is used as the heading and
-a default non-breaking space is used as the subtitle.
+Every column in the table is relabeled, not only the ones named in \code{...}. The
+loop walks the full set of column names, looks each one up in \code{...}, and builds
+an HTML label holding the heading at \code{heading_size} over the subtitle at
+\code{subtitle_size}, joined by a line break. A column with no entry in \code{...} falls back to its own name as the
+heading and a non-breaking space as the subtitle, so the second line still
+takes vertical space and the headers stay aligned. Labels are applied with
+\code{gt::cols_label()}, so call this after any other label changes or they will be
+overwritten.
 }
 \examples{
-# mtcars \%>\%
-#   head() \%>\%
-#   gt() \%>\%
-#   gt_column_subheaders(
-#     mpg = list(heading = "Top", subtitle = "Bottom"),
-#     hp = list(heading = "Horsepower", subtitle = "HP"),
-#     heading_color = "blue", subtitle_color = "gray"
-#   )
+\dontrun{
+library(gt)
+
+mtcars \%>\%
+  head() \%>\%
+  gt() \%>\%
+  gt_column_subheaders(
+    mpg = list(heading = "Top", subtitle = "Bottom"),
+    hp = list(heading = "Horsepower", subtitle = "HP"),
+    heading_color = "blue", subtitle_color = "gray"
+  )
+}
 
 }

@@ -9,26 +9,36 @@ gt_border_grid(gt_object, color = "black", weight = 1, include_labels = FALSE)
 \arguments{
 \item{gt_object}{A \code{gt} table object to modify.}
 
-\item{color}{A character string representing the color of the borders
-(default is \code{"black"}).}
+\item{color}{Character. The border color. Defaults to \code{"black"}.}
 
-\item{weight}{A numeric value specifying the thickness of the borders in
-pixels (default is \code{1}).}
+\item{weight}{Numeric. The border thickness in pixels. Defaults to \code{1}.}
 
-\item{include_labels}{Logical. Whether to include borders around row and
-column labels (default is \code{FALSE}).}
+\item{include_labels}{Logical. Should the borders extend around the row and
+column labels? Defaults to \code{FALSE}.}
 }
 \value{
-A \code{gt} table object with the grid borders applied.
+Returns a modified \code{gt} table with the grid borders applied.
 }
 \description{
-This function adds column and row borders to a \code{gt} table, creating a
-grid-like appearance. It can optionally include borders for column and row
+Draws borders between every column and every row of a \code{gt} table, giving it a
+full grid, with an option to extend the borders around the column and row
 labels.
 }
 \details{
-The \code{gt_border_grid} function adds a grid to a \code{gt} table by
-applying column and row borders. It uses the \code{gt_add_divider} function from
-\code{gtExtras} to add column borders and applies custom CSS for row borders. The
-function also generates a random table ID if one is not provided.
+Column borders are drawn with \code{gtExtras::gt_add_divider()} on every column but
+the last, and the row borders are added as scoped CSS on the \code{.gt_row} top
+border. A table id is resolved or generated first, since that CSS is keyed on
+\verb{#<table_id>}.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars)) \%>\% gt_border_grid()
+
+# heavier gray lines, including around the labels
+gt(head(iris)) \%>\%
+  gt_border_grid(color = "#BBBBBB", weight = 2, include_labels = TRUE)
+}
+
 }

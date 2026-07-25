@@ -1,19 +1,47 @@
-#' Baseball Savant `gt` Table Theme
+#' Baseball Savant theme for `gt` tables
 #'
-#' Apply Baseball Savant theme to a gt table
+#' Roboto Condensed throughout, with bold column labels and zebra-striped rows
+#' under a centered heading, after Baseball Savant. Row groups render as off-white
+#' labels on a black fill, and column spanners are bold and underlined.
 #'
-#' @returns Returns a styled gt table
-#' @param gt_object An existing gt table object of class `gt_tbl`
-#' @param ... Optional additional arguments to `gt::table_options()`
-#' @import gt
-#' @importFrom magrittr %>%
+#' @section Density:
+#'
+#' `density` scales the theme's type and row padding together. `"comfortable"`
+#' leaves every size as the theme sets it, `"compact"` scales both down, and
+#' `"social"` scales both up, to the scale [gt_save_crop()] and
+#' [gt_social_crop()] export at.
+#'
+#' @param gt_object A `gt` table object to modify.
+#' @param density Character. The type and padding scale. One of `"comfortable"`,
+#'   `"compact"`, or `"social"`. See Density. Defaults to `"comfortable"`.
+#' @param ... Additional arguments passed to `gt::tab_options`, applied last so
+#'   they override anything the theme sets.
+#'
+#' @returns Returns a modified `gt` table with the theme applied.
+#'
+#' @details
+#' The heading is centered rather than left aligned. Rows are zebra-striped through
+#' [gt::opt_row_striping()] and horizontal rules are hidden. The last body row's
+#' bottom border is painted white so it does not double the rule that closes the
+#' table.
+#'
 #' @section Figures:
 #' \if{html}{\figure{gt_theme_savant.png}{options: width=100\%}}
+#'
+#' @examples
+#' \dontrun{
+#' library(gt)
+#' gt(head(mtcars)) %>% gt_theme_savant()
+#' }
+#'
+#' @import gt
+#' @importFrom magrittr %>%
 #' @export
-gt_theme_savant <- function(gt_object, ...) {
+gt_theme_savant <- function(gt_object,
+                            density = c("comfortable", "compact", "social"),
+                            ...) {
 
-  stopifnot(`'gt_object' must be a 'gt_tbl', have you accidentally passed raw data?` = "gt_tbl" %in%
-              class(gt_object))
+  .check_gt(gt_object)
 
   table_id <- subset(gt_object[['_options']], parameter == 'table_id')$value[[1]]
 
@@ -88,10 +116,11 @@ gt_theme_savant <- function(gt_object, ...) {
       ...
     ) %>%
     gt::opt_row_striping() %>%
-    gt::opt_css(c(paste0("#", table_id, " tbody tr:last-child {border-bottom: 2px solid #ffffff00;}"),
+    gt::opt_css(c(paste0("#", table_id, " tbody tr:last-child {border-bottom: 2px solid #FFFFFF;}"),
                   paste0("#", table_id, " .gt_col_heading {padding-bottom: 2px; padding-top: 2px;}"),
                   paste0("#", table_id, " .gt_subtitle {padding-top:0px !important; padding-bottom: 4px !important;}"),
                   paste0("#", table_id, " .gt_heading {padding-bottom: 0px; padding-top: 6px;}"),
-                  paste0("#", table_id, " .gt_column_spanner {font-size: 12px; font-weight: bold; text-decoration: underline;}")))
+                  paste0("#", table_id, " .gt_column_spanner {font-size: 12px; font-weight: bold; text-decoration: underline;}"))) %>%
+    .theme_scale_output(density)
 
 }

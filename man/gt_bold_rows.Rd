@@ -2,36 +2,60 @@
 % Please edit documentation in R/gt_bold_rows.R
 \name{gt_bold_rows}
 \alias{gt_bold_rows}
-\title{Bold rows in a GT table with optional filtering and highlighting}
+\title{Bold rows in a \code{gt} table}
 \usage{
 gt_bold_rows(
   gt_object,
-  row = NULL,
+  rows = NULL,
   text_color = "black",
   highlight_color = NULL,
+  row = NULL,
   filter_statement = NULL
 )
 }
 \arguments{
-\item{gt_object}{A GT table object.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{row}{A vector of row indices to bold, default is all rows.}
+\item{rows}{The rows to bold. Either an expression evaluated against the
+table's data, such as \code{mpg > 20}, or a numeric vector of row indices. If
+\code{NULL}, every row is bolded. Defaults to \code{NULL}.}
 
-\item{text_color}{The color to be used for the text, default is 'black'.}
+\item{text_color}{Character. The text color for the bolded rows. Defaults to
+\code{"black"}.}
 
-\item{highlight_color}{The color to be used for the row background highlight, default is 'white'.
-If \code{NULL}, no background color will be applied.}
+\item{highlight_color}{Character. The background fill for the bolded rows. Set
+to \code{NULL} for no fill. Defaults to \code{NULL}.}
 
-\item{filter_statement}{A character string that contains a filter expression which is evaluated
-to determine which rows to bold. It should be a valid R expression as a string,
-for example, \code{"column_name > 5"}. Default is \code{NULL}, which means no filter is applied.}
+\item{row}{Deprecated. Use \code{rows}.}
+
+\item{filter_statement}{Deprecated. Use \code{rows}, which takes the expression
+directly rather than as a string.}
 }
 \value{
-A GT table object with the specified rows styled in bold text, and optionally with
-changed text color and background highlight.
+Returns a modified \code{gt} table with the chosen rows bolded.
 }
 \description{
-\code{gt_bold_rows} applies bold styling to rows of a GT table. You can specify rows to bold through a
-filter statement or by default, all rows are bolded. There is also an option to change the text
-color and add a background highlight color to the bolded rows.
+Bolds the body cells of chosen rows, with an option to recolor their text and
+fill their background. Rows are chosen by index or by a filter expression; with
+neither, every row is bolded.
+}
+\details{
+When \code{filter_statement} is supplied it is parsed and evaluated against the
+table's underlying data, and the rows it matches are bolded. A \code{row} vector
+takes over when no filter is given. The styling is applied with a single
+\code{gt::tab_style()} over \code{gt::cells_body()}, so it covers every column of the
+chosen rows.
+}
+\examples{
+\dontrun{
+library(gt)
+
+# bold every row
+gt(head(mtcars)) \%>\% gt_bold_rows()
+
+# bold and fill the rows above 20 mpg
+gt(head(mtcars)) \%>\%
+  gt_bold_rows(filter_statement = "mpg > 20", highlight_color = "#FFF3B0")
+}
+
 }

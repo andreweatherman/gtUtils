@@ -2,23 +2,61 @@
 % Please edit documentation in R/gt_theme_athletic.R
 \name{gt_theme_athletic}
 \alias{gt_theme_athletic}
-\title{The Athletic \code{gt} Table Theme}
+\title{The Athletic theme for \code{gt} tables}
 \usage{
-gt_theme_athletic(gt_object, ...)
+gt_theme_athletic(
+  gt_object,
+  density = c("comfortable", "compact", "social"),
+  ...
+)
 }
 \arguments{
-\item{gt_object}{An existing gt table object of class \code{gt_tbl}}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{...}{Optional additional arguments to \code{gt::table_options()}}
+\item{density}{Character. The type and padding scale. One of \code{"comfortable"},
+\code{"compact"}, or \code{"social"}. See Density. Defaults to \code{"comfortable"}.}
+
+\item{...}{Additional arguments passed to \code{gt::tab_options}, applied last so
+they override anything the theme sets.}
 }
 \value{
-Returns a styled gt table
+Returns a modified \code{gt} table with the theme applied.
 }
 \description{
-Apply The Athletic theme to a gt table
+Modeled on The Athletic's tables. A monospaced Spline Sans Mono body,
+uppercase Work Sans labels and titles, dotted rules between rows, thin
+vertical rules separating the columns, and a solid black row-group band with
+knocked-out white labels. All columns are centered.
 }
+\details{
+The row rules are a dotted top border applied to every body row, and the
+column separators are a thin left border on every column except the first, so
+the stub reads without a leading rule. Both are drawn with \code{gt::cell_borders()}
+rather than table options. A table id is resolved (or generated) up front so
+the \code{gt::opt_css()} block can pin the closing row border and heading padding
+to this table alone.
+\code{density} rescales the finished table, since this theme sets its sizes
+directly rather than deriving them from a scale.
+}
+\section{Density}{
+
+
+\code{density} scales the theme's type and row padding together. \code{"comfortable"}
+leaves every size as the theme sets it, \code{"compact"} scales both down, and
+\code{"social"} scales both up, to the scale \code{\link[=gt_save_crop]{gt_save_crop()}} and
+\code{\link[=gt_social_crop]{gt_social_crop()}} export at.
+}
+
 \section{Figures}{
 
 \if{html}{\figure{gt_theme_athletic.png}{options: width=100\%}}
 }
 
+\examples{
+\dontrun{
+library(gt)
+gt(head(mtcars)) \%>\% gt_theme_athletic()
+gt(head(mtcars)) \%>\% gt_theme_athletic(density = "compact")
+}
+
+}

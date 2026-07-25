@@ -2,31 +2,76 @@
 % Please edit documentation in R/gt_tiers.R
 \name{gt_tiers}
 \alias{gt_tiers}
-\title{Apply tier-based background colors and bold styling to a \code{gt} table}
+\title{Color and bold the tier column of a \code{gt} table}
 \usage{
-gt_tiers(gt_object, levels, colors, style = "dark", img_height = "55px")
+gt_tiers(
+  gt_object,
+  levels,
+  colors = NULL,
+  style = "dark",
+  img_height = "55px",
+  tier_column = "tier",
+  image_columns = NULL
+)
 }
 \arguments{
 \item{gt_object}{A \code{gt} table object to modify.}
 
-\item{levels}{A character vector specifying the tier levels. These should match
-the factor levels in the \code{tier} column of the table.}
+\item{levels}{Character. The tier levels, matching the values in the table's
+tier column. May instead be a single named vector of \code{level = color}, in
+which case \code{colors} is left unset. That is the same shape
+\code{\link[=gt_legend_discrete]{gt_legend_discrete()}} takes, so one object can drive both.}
 
-\item{colors}{A character vector of hex color codes corresponding to the tier levels.
-The length of \code{colors} must match the length of \code{levels}.}
+\item{colors}{Character. Hex color codes paired with \code{levels}, in the same
+order. Must be the same length as \code{levels}. Defaults to \code{NULL}, which
+requires \code{levels} to carry the colors as names.}
+
+\item{style}{Character. The color scheme, passed to \code{\link[=gt_theme_tier]{gt_theme_tier()}}. Either
+\code{"dark"} for a near-black ground or \code{"light"} for a white one. Defaults to
+\code{"dark"}.}
+
+\item{img_height}{Character. The height of the images rendered in the image
+columns, as a CSS size. Defaults to \code{"55px"}.}
+
+\item{tier_column}{Character. The name of the column holding the tier levels.
+Defaults to \code{"tier"}.}
+
+\item{image_columns}{Optional. The columns to render as images. When \code{NULL},
+every column other than \code{tier_column} is rendered as images. Defaults to
+\code{NULL}.}
 }
 \value{
-Returns a modified \code{gt} table with tier-based background colors and bold text applied.
+Returns a modified \code{gt} table with the tier column colored and bolded.
 }
 \description{
-This function applies background colors to rows based on tier levels and bolds
-the tier column in a \code{gt} table. It iterates over the specified levels and
-applies the corresponding colors to the rows that match each tier. The text color
-for the \code{tier} column is determined using \code{gt:::ideal_fgnd_color} for better contrast.
+Fills the cells of a \code{tier} column by tier level and bolds them, pairing each
+level with a color. The remaining columns are rendered as images, since the
+intended layout is a tier list with logos or headshots ranked into colored
+bands.
 }
 \details{
-The function applies background colors based on the \code{levels} vector to the rows where
-the \code{tier} column matches the level. It also bolds the text in the \code{tier} column for
-clearer differentiation and uses \code{gt:::ideal_fgnd_color} to determine the appropriate
-text color for the background.
+The theme is applied once with \code{\link[=gt_theme_tier]{gt_theme_tier()}}, the image columns are passed
+through \code{gt::fmt_image()} at \code{img_height}, and all column labels are cleared,
+so the input for those columns must be image paths or URLs. The function then
+reduces over \code{levels}, and for each level fills the matching \code{tier_column}
+cells with the paired color and sets their text to black or white, whichever
+measures higher contrast against that fill, so each band keeps a legible
+label. Naming \code{image_columns} leaves the rest untouched, so a text column can
+sit alongside the images.
+}
+\examples{
+\dontrun{
+library(gt)
+
+standings <- data.frame(
+  tier = c("A", "A", "B"),
+  logo = c("https://example.com/1.png",
+           "https://example.com/2.png",
+           "https://example.com/3.png")
+)
+
+gt(standings) \%>\%
+  gt_tiers(levels = c("A", "B"), colors = c("#1B7837", "#B2182B"))
+}
+
 }

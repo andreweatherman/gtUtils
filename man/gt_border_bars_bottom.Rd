@@ -2,7 +2,7 @@
 % Please edit documentation in R/gt_border_bars.R
 \name{gt_border_bars_bottom}
 \alias{gt_border_bars_bottom}
-\title{Add horizontal bars with optional image, text, and Google Font to the bottom of a \code{gt} table}
+\title{Add horizontal bars to the bottom of a \code{gt} table}
 \usage{
 gt_border_bars_bottom(
   gt_object,
@@ -24,46 +24,76 @@ gt_border_bars_bottom(
 )
 }
 \arguments{
-\item{gt_object}{A \code{gt} table object.}
+\item{gt_object}{A \code{gt} table object to modify.}
 
-\item{colors}{A character vector of hex color codes for the bars.}
+\item{colors}{Character. Hex color codes, one per bar. When \code{img} or \code{text} is
+supplied only the first color is used.}
 
-\item{bar_height}{The height of the bars in pixels. Default is 10px.}
+\item{bar_height}{Numeric. The height of the bars in pixels. Defaults to \code{10}.}
 
-\item{bar_width}{The width of the bars in percentage. Default is 100\%.}
+\item{bar_width}{Character. The width of the bar block, as a CSS width.
+Defaults to \code{"100\%"}.}
 
-\item{bar_align}{Alignment of the bars when \code{bar_width} is not 100\%. Options are 'left', 'center', or 'right'. Default is 'center'.}
+\item{bar_align}{Character. Alignment of the block when \code{bar_width} is under
+\code{"100\%"}. One of \code{"left"}, \code{"center"}, \code{"right"}. Defaults to \code{"center"}.}
 
-\item{img}{A URL for an image to render in the bar (optional).}
+\item{img}{Optional. A URL for an image to render in the bar. Defaults to
+\code{NULL}.}
 
-\item{img_width}{The width of the image in pixels. Default is 30px.}
+\item{img_width}{Numeric. The image width in pixels. Defaults to \code{30}.}
 
-\item{img_height}{The height of the image in pixels. Default is 30px.}
+\item{img_height}{Numeric. The image height in pixels. Defaults to \code{30}.}
 
-\item{img_padding}{Padding around the image to ensure it's not touching the edges. Default is 10px.}
+\item{img_padding}{Numeric. Padding around the image in pixels, so it does not
+touch the edge. Defaults to \code{10}.}
 
-\item{img_align}{Alignment of the image within the bar ('left', 'center', 'right'). Default is 'right'.}
+\item{img_align}{Character. The side the image padding is applied to, one of
+\code{"left"}, \code{"center"}, \code{"right"}. Defaults to \code{"right"}.}
 
-\item{text}{Optional text to display in the bar.}
+\item{text}{Optional. Text to display in the bar. Defaults to \code{NULL}.}
 
-\item{text_weight}{Font weight of the text. Default is 'bold' for emphasis.}
+\item{text_weight}{Character. The font weight of the text. Defaults to
+\code{"bold"}.}
 
-\item{text_color}{Color of the text. Default is '#FFFFFF' (white).}
+\item{text_color}{Character. The text color. Defaults to \code{"#FFFFFF"}.}
 
-\item{text_size}{Font size for the text. Default is 18px.}
+\item{text_size}{Numeric. The font size in pixels. Defaults to \code{18}.}
 
-\item{text_align}{Alignment of the text within the bar ('left', 'center', 'right'). Default is 'left'.}
+\item{text_align}{Character. The side the text padding is applied to, one of
+\code{"left"}, \code{"center"}, \code{"right"}. Defaults to \code{"left"}.}
 
-\item{text_padding}{Padding around the text to ensure it's not touching the edges. Default is 10px.}
+\item{text_padding}{Numeric. Padding around the text in pixels. Defaults to
+\code{10}.}
 }
 \value{
-A \code{gt} table with a row of horizontal bars at the bottom.
+Returns a modified \code{gt} table with a row of bars below it.
 }
 \description{
-This function adds a row of horizontal bars at the bottom of a \code{gt} table,
-using a character vector of hex color codes. The bars are added as a source note with
-customizable height, width, alignment, image size, text formatting, and image/text alignment.
-If image or text is provided, only one color will be used, and that bar will
-contain the image and/or text. The function automatically inherits the font from the \code{gt}
-object and uses the corresponding Google Font for any text rendered in the bar.
+Adds a row of horizontal color bars below a \code{gt} table from a vector of hex
+colors, optionally carrying an image and a line of text. The bars are attached
+as a source note, so they sit below everything else. It is the bottom-edge
+counterpart to \code{\link[=gt_border_bars_top]{gt_border_bars_top()}}.
+}
+\details{
+The bars are added with \code{gt::tab_source_note()}, and a table id is resolved or
+generated so scoped CSS can zero the source-note padding. With neither \code{img}
+nor \code{text}, each entry in \code{colors} becomes its own full-width bar stacked in a
+block. When \code{img} or \code{text} is supplied, a single bar is drawn in the first
+color as a flex row with the text at one end and the image at the other. The
+text font is read from the table's source-note styling and imported as a
+Google Font, falling back to the inherited font when none is set, so it renders
+in an exported table.
+}
+\examples{
+\dontrun{
+library(gt)
+
+gt(head(mtcars)) \%>\%
+  gt_border_bars_bottom(c("#1B7837", "#FFFFFF", "#B2182B"))
+
+# a single bar carrying a credit line
+gt(head(iris)) \%>\%
+  gt_border_bars_bottom("#22223B", text = "Source: iris", bar_height = 28)
+}
+
 }
