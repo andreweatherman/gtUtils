@@ -1,0 +1,371 @@
+# ![gtUtils](reference/figures/wordmark.svg)
+
+Themes, coloring functions, and utilities that extend
+[gt](https://gt.rstudio.com/) for building beautiful tables in R.
+
+``` r
+
+remotes::install_github("andreweatherman/gtUtils")
+```
+
+[ Twitter](https://twitter.com/andreweatherman) [ Personal
+site](https://www.aweatherman.com/) [ Report an
+issue](https://github.com/andreweatherman/gtUtils/issues)
+
+## What’s inside
+
+[18 Themes Editorial, broadcast, and publication looks, each with a
+density
+scale](https://andreweatherman.github.io/gtUtils/reference/index.html#themes)
+[13 Coloring Fill cells, columns, and rows by value, rank, or
+condition](https://andreweatherman.github.io/gtUtils/reference/index.html#coloring)
+[7 Annotations Captions, headers, cut lines, watermarks, and margin
+notes](https://andreweatherman.github.io/gtUtils/reference/index.html#annotations)
+[5 Layout Fold one long table into blocks, or arrange several as small
+multiples](https://andreweatherman.github.io/gtUtils/reference/index.html#layout)
+[4 Viewing + Saving Crop, pad, and size a saved table for export or
+posting](https://andreweatherman.github.io/gtUtils/reference/index.html#viewing-saving)
+[13 Formatting Ordinals, tallies, deltas, significance stars, and scale
+notes](https://andreweatherman.github.io/gtUtils/reference/index.html#other)
+
+[Browse the full function
+reference](https://andreweatherman.github.io/gtUtils/reference/index.md)
+
+# Package index
+
+## Annotations
+
+Functions for table annotations
+
+- [`gt_538_caption()`](https://andreweatherman.github.io/gtUtils/reference/gt_538_caption.md)
+  :
+
+  Add a 538-style caption to a `gt` table
+
+- [`gt_cutline()`](https://andreweatherman.github.io/gtUtils/reference/gt_cutline.md)
+  :
+
+  Draw a labeled cut line between rows of a `gt` table
+
+- [`gt_marginalia()`](https://andreweatherman.github.io/gtUtils/reference/gt_marginalia.md)
+  : Style a column as margin notes
+
+- [`gt_column_subheaders()`](https://andreweatherman.github.io/gtUtils/reference/gt_column_subheaders.md)
+  :
+
+  Add stacked column headers with subtitles to a `gt` table
+
+- [`gt_social_tag()`](https://andreweatherman.github.io/gtUtils/reference/gt_social_tag.md)
+  :
+
+  Add social handles to a `gt` table
+
+- [`gt_title_header()`](https://andreweatherman.github.io/gtUtils/reference/gt_title_header.md)
+  :
+
+  Build a styled header block for a `gt` table
+
+- [`gt_watermark()`](https://andreweatherman.github.io/gtUtils/reference/gt_watermark.md)
+  :
+
+  Put a watermark behind a `gt` table
+
+## Coloring
+
+Functions to color/fill columns of data
+
+- [`gt_legend_continuous()`](https://andreweatherman.github.io/gtUtils/reference/gt_legend_continuous.md)
+  :
+
+  Add a color legend to a `gt` table
+
+- [`gt_legend_discrete()`](https://andreweatherman.github.io/gtUtils/reference/gt_legend_discrete.md)
+  :
+
+  Add a discrete color key to a `gt` table
+
+- [`gt_color_pills()`](https://andreweatherman.github.io/gtUtils/reference/gt_color_pills.md)
+  :
+
+  Add color pills to `gt` table columns
+
+- [`gt_percentile_bar()`](https://andreweatherman.github.io/gtUtils/reference/gt_percentile_bar.md)
+  :
+
+  Draw percentile bars in a `gt` table
+
+- [`gt_row_accent()`](https://andreweatherman.github.io/gtUtils/reference/gt_row_accent.md)
+  : Put a colored bar on the leading edge of each row
+
+- [`gt_color_ranks()`](https://andreweatherman.github.io/gtUtils/reference/gt_color_ranks.md)
+  :
+
+  Color ranked columns of a `gt` table
+
+- [`gt_color_results()`](https://andreweatherman.github.io/gtUtils/reference/gt_color_results.md)
+  :
+
+  Color rows of a `gt` table by win, loss, or tie result
+
+- [`gt_group_stripes()`](https://andreweatherman.github.io/gtUtils/reference/gt_group_stripes.md)
+  :
+
+  Band alternate row groups of a `gt` table
+
+- [`gt_highlight_cells()`](https://andreweatherman.github.io/gtUtils/reference/gt_highlight_cells.md)
+  :
+
+  Fill individual cells in a `gt` table by a condition
+
+- [`gt_highlight_na()`](https://andreweatherman.github.io/gtUtils/reference/gt_highlight_na.md)
+  :
+
+  Style and relabel missing values in a `gt` table
+
+- [`gt_outliers()`](https://andreweatherman.github.io/gtUtils/reference/gt_outliers.md)
+  :
+
+  Flag outlying values in a `gt` table
+
+- [`gt_indicator_boxes()`](https://andreweatherman.github.io/gtUtils/reference/gt_indicator_boxes.md)
+  :
+
+  Add colored indicator boxes to a `gt` table
+
+- [`gt_spotlight()`](https://andreweatherman.github.io/gtUtils/reference/gt_spotlight.md)
+  :
+
+  Focus on rows of a `gt` table by dimming the rest
+
+## Other
+
+Miscellaneous functions
+
+- [`pal_midnight`](https://andreweatherman.github.io/gtUtils/reference/pal_midnight.md)
+  : A rank palette for dark backgrounds
+
+- [`gt_bold_rows()`](https://andreweatherman.github.io/gtUtils/reference/gt_bold_rows.md)
+  :
+
+  Bold rows in a `gt` table
+
+- [`gt_border_bars_bottom()`](https://andreweatherman.github.io/gtUtils/reference/gt_border_bars_bottom.md)
+  :
+
+  Add horizontal bars to the bottom of a `gt` table
+
+- [`gt_border_bars_top()`](https://andreweatherman.github.io/gtUtils/reference/gt_border_bars_top.md)
+  :
+
+  Add horizontal bars to the top of a `gt` table
+
+- [`gt_border_grid()`](https://andreweatherman.github.io/gtUtils/reference/gt_border_grid.md)
+  :
+
+  Add a border grid to a `gt` table
+
+- [`gt_delta()`](https://andreweatherman.github.io/gtUtils/reference/gt_delta.md)
+  :
+
+  Add a computed change column to a `gt` table
+
+- [`gt_fmt_rank()`](https://andreweatherman.github.io/gtUtils/reference/gt_fmt_rank.md)
+  :
+
+  Format numbers as ordinals in a `gt` table
+
+- [`gt_fmt_tally()`](https://andreweatherman.github.io/gtUtils/reference/gt_fmt_tally.md)
+  :
+
+  Combine count columns into a single cell in a `gt` table
+
+- [`gt_scale_note()`](https://andreweatherman.github.io/gtUtils/reference/gt_scale_note.md)
+  : Scale columns and disclose the scaling
+
+- [`gt_significance()`](https://andreweatherman.github.io/gtUtils/reference/gt_significance.md)
+  :
+
+  Add significance stars to a `gt` table
+
+- [`gt_set_font()`](https://andreweatherman.github.io/gtUtils/reference/gt_set_font.md)
+  :
+
+  Set one font family across a whole `gt` table
+
+- [`gt_tiers()`](https://andreweatherman.github.io/gtUtils/reference/gt_tiers.md)
+  :
+
+  Color and bold the tier column of a `gt` table
+
+- [`gt_wrap_labels()`](https://andreweatherman.github.io/gtUtils/reference/gt_wrap_labels.md)
+  :
+
+  Break long column labels across lines in a `gt` table
+
+## Layout
+
+Arranging tables and their blocks
+
+- [`gt_grid()`](https://andreweatherman.github.io/gtUtils/reference/gt_grid.md)
+  :
+
+  Arrange several `gt` tables in a grid
+
+- [`gt_snake()`](https://andreweatherman.github.io/gtUtils/reference/gt_snake.md)
+  : Lay a long table out in side-by-side blocks
+
+- [`gt_snake_align()`](https://andreweatherman.github.io/gtUtils/reference/gt_snake_align.md)
+  : Reshape a parallel frame to match a snaked table
+
+- [`gt_theme_preview()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_preview.md)
+  : Preview data in every theme
+
+- [`gt_stack_tables()`](https://andreweatherman.github.io/gtUtils/reference/gt_stack_tables.md)
+  :
+
+  Stack several `gt` tables vertically
+
+## Viewing + Saving
+
+Functions for viewing and saving tables
+
+- [`gt_save_batch()`](https://andreweatherman.github.io/gtUtils/reference/gt_save_batch.md)
+  : Save a matched set of images, one per group
+
+- [`gt_save_crop()`](https://andreweatherman.github.io/gtUtils/reference/gt_save_crop.md)
+  :
+
+  Save a `gt` table to an image and trim its whitespace
+
+- [`gt_social_crop()`](https://andreweatherman.github.io/gtUtils/reference/gt_social_crop.md)
+  :
+
+  Save a `gt` table onto a fixed-ratio canvas
+
+- [`theme_bg`](https://andreweatherman.github.io/gtUtils/reference/theme_bg.md)
+  :
+
+  Background colors used by the `gtUtils` themes
+
+## Themes
+
+Table themes for use with {gt}
+
+- [`gt_theme_almanac()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_almanac.md)
+  :
+
+  Record-book theme for `gt` tables
+
+- [`gt_theme_athletic()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_athletic.md)
+  :
+
+  The Athletic theme for `gt` tables
+
+- [`gt_theme_booktabs()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_booktabs.md)
+  :
+
+  Academic booktabs theme for `gt` tables
+
+- [`gt_theme_broadsheet()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_broadsheet.md)
+  :
+
+  Editorial serif theme for `gt` tables
+
+- [`gt_theme_brutalist()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_brutalist.md)
+  :
+
+  Heavy-rule display theme for `gt` tables
+
+- [`gt_theme_drench()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_drench.md)
+  :
+
+  Saturated single-color theme for `gt` tables
+
+- [`gt_theme_gtutils()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_gtutils.md)
+  :
+
+  gtUtils theme for `gt` tables
+
+- [`gt_theme_kenpom()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_kenpom.md)
+  :
+
+  KenPom theme for `gt` tables
+
+- [`gt_theme_midnight()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_midnight.md)
+  :
+
+  Dark theme for `gt` tables
+
+- [`gt_theme_ncaa()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_ncaa.md)
+  :
+
+  NCAA theme for `gt` tables
+
+- [`gt_theme_pl()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_pl.md)
+  :
+
+  Premier League theme for `gt` tables
+
+- [`gt_theme_savant()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_savant.md)
+  :
+
+  Baseball Savant theme for `gt` tables
+
+- [`gt_theme_scoreboard()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_scoreboard.md)
+  :
+
+  Broadcast-graphics theme for `gt` tables
+
+- [`gt_theme_sofa()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_sofa.md)
+  :
+
+  SofaScore theme for `gt` tables
+
+- [`gt_theme_swiss()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_swiss.md)
+  :
+
+  International Typographic Style theme for `gt` tables
+
+- [`gt_theme_terminal()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_terminal.md)
+  :
+
+  Data-terminal theme for `gt` tables
+
+- [`gt_theme_tier()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_tier.md)
+  :
+
+  Tier list theme for `gt` tables
+
+- [`gt_theme_tufte()`](https://andreweatherman.github.io/gtUtils/reference/gt_theme_tufte.md)
+  :
+
+  Minimal-ink theme for `gt` tables
+
+## Deprecated
+
+Former names, kept for backward compatibility
+
+- [`gt_color_legend()`](https://andreweatherman.github.io/gtUtils/reference/gtUtils-deprecated.md)
+  [`gt_centered_legend()`](https://andreweatherman.github.io/gtUtils/reference/gtUtils-deprecated.md)
+  : Deprecated legend functions
+
+# Articles
+
+### All vignettes
+
+- [Border
+  Bars](https://andreweatherman.github.io/gtUtils/articles/border_bars.md):
+- [Percentile Bars and Cut
+  Lines](https://andreweatherman.github.io/gtUtils/articles/delay_tables.md):
+- [Creating Faceted
+  Tables](https://andreweatherman.github.io/gtUtils/articles/grid_tables.md):
+- [Saving and Posting
+  Tables](https://andreweatherman.github.io/gtUtils/articles/saving_tables.md):
+- [Building a Schedule
+  Matrix](https://andreweatherman.github.io/gtUtils/articles/schedule_matrix.md):
+- [Styling Headers, Legends, and
+  Captions](https://andreweatherman.github.io/gtUtils/articles/styling.md):
+- [Creating Tier
+  Lists](https://andreweatherman.github.io/gtUtils/articles/tier_list.md):
+- [Winningest Programs in Rolling
+  Windows](https://andreweatherman.github.io/gtUtils/articles/window_wins.md):

@@ -6,30 +6,29 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Border Bars • gtUtils</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Jost-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/Oswald-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Jost-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/Oswald-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Border Bars">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">gtUtils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,9 +42,13 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/border_bars.html">Border Bars</a></li>
-    <li><a class="dropdown-item" href="../articles/general_uses.html">General Uses</a></li>
-    <li><a class="dropdown-item" href="../articles/table_themes.html">Table Themes</a></li>
+    <li><a class="dropdown-item" href="../articles/delay_tables.html">Percentile Bars and Cut Lines</a></li>
+    <li><a class="dropdown-item" href="../articles/grid_tables.html">Creating Faceted Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/saving_tables.html">Saving and Posting Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/schedule_matrix.html">Building a Schedule Matrix</a></li>
+    <li><a class="dropdown-item" href="../articles/styling.html">Styling Headers, Legends, and Captions</a></li>
     <li><a class="dropdown-item" href="../articles/tier_list.html">Creating Tier Lists</a></li>
+    <li><a class="dropdown-item" href="../articles/window_wins.html">Winningest Programs in Rolling Windows</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -122,17 +125,17 @@ better. We’re going to plot national percentiles on a location split
 <p>Let’s get the data:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">home_splits</span> <span class="op">&lt;-</span> <span class="fu">cbd_torvik_team_factors</span><span class="op">(</span>venue <span class="op">=</span> <span class="st">"home"</span>, year <span class="op">=</span> <span class="fl">2024</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">stats_to_consider</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">stats_to_consider</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">away_splits</span> <span class="op">&lt;-</span> <span class="fu">cbd_torvik_team_factors</span><span class="op">(</span>venue <span class="op">=</span> <span class="st">"away"</span>, year <span class="op">=</span> <span class="fl">2024</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">stats_to_consider</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">stats_to_consider</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s a quick function to take that data and calculate percentiles
 using <code>dplyr</code>. We’re going to pivot the data to a long format
 for later use.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calculate_percentiles</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">location</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">higher_better</span><span class="op">)</span>, <span class="op">~</span><span class="fu">percent_rank</span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">higher_better</span><span class="op">)</span>, <span class="op">~</span><span class="fu">percent_rank</span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>           <span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">stats_to_consider</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"team"</span>, <span class="va">higher_better</span><span class="op">)</span><span class="op">)</span>, <span class="op">~</span><span class="fu">percent_rank</span><span class="op">(</span><span class="op">-</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">team</span>, names_to <span class="op">=</span> <span class="st">"stat"</span>, values_to <span class="op">=</span> <span class="st">"percentile"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>location <span class="op">=</span> <span class="va">location</span><span class="op">)</span></span>
@@ -224,7 +227,7 @@ descriptive with additional time or effort.</p>
 <span>    img_height <span class="op">=</span> <span class="fl">40</span>,</span>
 <span>    bar_height <span class="op">=</span> <span class="fl">60</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="images/border-bars-player-report.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="images/border-bars-player-report.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="table-footers">Table Footers<a class="anchor" aria-label="anchor" href="#table-footers"></a>
@@ -265,7 +268,7 @@ a decent start to a table!</p>
 <span>    title <span class="op">=</span> <span class="st">"The 15 Greatest Albums of All Time"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Surveying the 2020 Rolling Stone's *500 Greatest Albums List*"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="images/border-bars-rolling-stones.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="images/border-bars-rolling-stones.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="just-for-fun">Just for fun<a class="anchor" aria-label="anchor" href="#just-for-fun"></a>
@@ -294,7 +297,7 @@ at the top and the last color is at the bottom.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span><span class="st">"Example Title"</span>, <span class="st">"Example Subtitle"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/gt_border_bars_bottom.html">gt_border_bars_bottom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#EDBD68"</span>, <span class="st">"#F2704E"</span>, <span class="st">"#DE5152"</span>, <span class="st">"#A43845"</span>, <span class="st">"#602B53"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span></code></pre></div>
-<p><img src="images/border-bars-for-fun.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="images/border-bars-for-fun.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -307,7 +310,7 @@ at the top and the last color is at the bottom.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
